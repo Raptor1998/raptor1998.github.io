@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
-    <title>css技巧学习笔记</title>
+    <title>css+js技巧学习笔记</title>
     <url>/2020/07/05/css%E6%8A%80%E5%B7%A7%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/</url>
     <content><![CDATA[<html><head><link rel="stylesheet" class="aplayer-secondary-style-marker" href="\assets\css\APlayer.min.css"><script src="\assets\js\APlayer.min.js" class="aplayer-secondary-script-marker"></script><script class="meting-secondary-script-marker" src="\assets\js\Meting.min.js"></script></head><body><h1 id="CSDN地址"><a href="#CSDN地址" class="headerlink" title="CSDN地址"></a>CSDN地址</h1><p>  不知道为啥css代码会被自动渲染，遂挂上csdn地址。<br>  <a href="https://blog.csdn.net/C18854805113/article/details/107210819" target="_blank" rel="noopener">https://blog.csdn.net/C18854805113/article/details/107210819</a></p>
 <h1 id="文章内容"><a href="#文章内容" class="headerlink" title="文章内容"></a>文章内容</h1><h2 id="精灵图"><a href="#精灵图" class="headerlink" title="精灵图"></a>精灵图</h2><h3 id="场景"><a href="#场景" class="headerlink" title="场景"></a>场景</h3><p>  浏览器工作时向服务器发送请求，服务器接受请求后，将数据返回页面，页面中图片较多时，会出现频繁的请求和发送请求，服务器压力变大，会降低网页加载速度。将网页中小的一些小背景图片合并到一张图中，就称为css精灵技术。</p>
