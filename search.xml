@@ -199,7 +199,7 @@
 <li><p><strong>/etc/passwd 文件</strong> </p>
 <p>用户（user）的配置文件，记录用户的各种信息 </p>
 <p>每行的含义：用户名:口令:用户标识号:组标识号:注释性描述:主目录:登录Shell</p>
-<p><a href="https://cdn.jsdelivr.net/gh/raptor1998/imghouse/untidy/%5DAQ%D%5D8NXL%LJFP0WO~P%7BDC.png" data-fancybox="group" data-caption="/etc/passwd" class="fancybox"><img alt="/etc/passwd" title="/etc/passwd" data-src="https://cdn.jsdelivr.net/gh/raptor1998/imghouse/untidy/%5DAQ%D%5D8NXL%LJFP0WO~P%7BDC.png" src="https://cdn.jsdelivr.net/gh/raptor1998/imghouse/raptor1998_img/loading.gif" class="lazyload"></a></p>
+<p><a href="https://cdn.jsdelivr.net/gh/raptor1998/imghouse/untidy/passwd.png" data-fancybox="group" data-caption="/etc/passwd" class="fancybox"><img alt="/etc/passwd" title="/etc/passwd" data-src="https://cdn.jsdelivr.net/gh/raptor1998/imghouse/untidy/passwd.png" src="https://cdn.jsdelivr.net/gh/raptor1998/imghouse/raptor1998_img/loading.gif" class="lazyload"></a></p>
 </li>
 <li><p><strong>/etc/shadow文件</strong></p>
 <p>口令的配置文件 </p>
