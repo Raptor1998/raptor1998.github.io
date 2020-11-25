@@ -919,6 +919,219 @@
 </li>
 </ul>
 <p><a href="https://cdn.jsdelivr.net/gh/raptor1998/imghouse/untidy/mysqlremote.png" data-fancybox="group" data-caption="远程连接" class="fancybox"><img alt="远程连接" title="远程连接" data-src="https://cdn.jsdelivr.net/gh/raptor1998/imghouse/untidy/mysqlremote.png" src="https://cdn.jsdelivr.net/gh/raptor1998/imghouse/raptor1998_img/loading.gif" class="lazyload"></a></p>
+<h1 id="shell快速入门"><a href="#shell快速入门" class="headerlink" title="shell快速入门"></a>shell快速入门</h1><h3 id="格式要求"><a href="#格式要求" class="headerlink" title="格式要求"></a>格式要求</h3><ul>
+<li><p>1) 脚本以#!/bin/bash开头 </p>
+</li>
+<li><p>2) 脚本需要有可执行权限 </p>
+</li>
+</ul>
+<h3 id="执行方式"><a href="#执行方式" class="headerlink" title="执行方式"></a>执行方式</h3><ul>
+<li><p>方式1(输入脚本的绝对路径或相对路径) </p>
+<ul>
+<li><p>1)首先要赋予helloworld.sh 脚本的+x权限 </p>
+</li>
+<li><p>2)执行脚本 </p>
+</li>
+</ul>
+</li>
+<li><p>方式2(sh+脚本) </p>
+<ul>
+<li>说明：不用赋予脚本+x权限，直接执行即可</li>
+</ul>
+</li>
+</ul>
+<h3 id="变量的定义"><a href="#变量的定义" class="headerlink" title="变量的定义"></a>变量的定义</h3><h4 id="基本语法"><a href="#基本语法" class="headerlink" title="基本语法"></a>基本语法</h4><ul>
+<li><p>1)定义变量：变量=值 </p>
+</li>
+<li><p>2)撤销变量：unset 变量 </p>
+</li>
+<li><p>3) 声明静态变量：readonly变量，注意：不能unset</p>
+</li>
+</ul>
+<h4 id="定义变量的规则"><a href="#定义变量的规则" class="headerlink" title="定义变量的规则"></a>定义变量的规则</h4><ul>
+<li><p>1) 变量名称可以由字母、数字和下划线组成，但是不能以数字开头。 </p>
+</li>
+<li><p>2) 等号两侧不能有空格 </p>
+</li>
+<li><p>3) 变量名称一般习惯为大写 </p>
+</li>
+</ul>
+<p><strong>将命令的返回值赋给变量</strong> </p>
+<ul>
+<li><p>1）A=<code>ls -la</code> 反引号，运行里面的命令，并把结果返回给变量A </p>
+</li>
+<li><p>2）A=$(ls -la) 等价于反引号</p>
+</li>
+</ul>
+<h4 id="设置环境变量"><a href="#设置环境变量" class="headerlink" title="设置环境变量"></a><strong>设置环境变量</strong></h4><h5 id="基本语法-1"><a href="#基本语法-1" class="headerlink" title="基本语法"></a><strong>基本语法</strong></h5><ul>
+<li><p>1) export 变量名=变量值 </p>
+<p>（功能描述：将shell变量输出为环境变量） </p>
+</li>
+<li><p>2) source 配置文件 </p>
+<p>（功能描述：让修改后的配置信息立即生效） </p>
+</li>
+<li><p>3) echo $变量名 </p>
+<p>（功能描述：查询环境变量的值）</p>
+</li>
+</ul>
+<div class="code-area-wrap"><div class="highlight-tools"><i class="fa fa-angle-down code-expand" aria-hidden="true"></i><div class="code_lang">shell</div><div class="copy-notice"></div><i class="fa fa-clipboard" aria-hidden="true"></i></div><figure class="highlight shell"><table><tbody><tr><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash">profile内设置变量</span></span><br><span class="line">TEST_HOME=/usr/local</span><br><span class="line">export TEST_HOME</span><br><span class="line">:<<!--</span--><br><span class="line"></span><br><span class="line">多行注释</span><br><span class="line"></span><br><span class="line">!</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span><span class="bash">测试</span></span><br><span class="line">echo "$TEST_HOME"</span><br></span></pre></td></tr></tbody></table></figure></div>
+
+<h4 id="位置参数变量"><a href="#位置参数变量" class="headerlink" title="位置参数变量"></a>位置参数变量</h4><ul>
+<li><p>$n （功能描述：n为数字，$0代表命令本身，$1-$9代表第一到第九个参数，十以上的参数，十以上的参 数需要用大括号包含，如${10}） </p>
+</li>
+<li><p>$* （功能描述：这个变量代表命令行中所有的参数，$*把所有的参数看成一个整体） </p>
+</li>
+<li><p>$@（功能描述：这个变量也代表命令行中所有的参数，不过$@把每个参数区分对待） </p>
+</li>
+<li><p>$#（功能描述：这个变量代表命令行中所有参数的个数）</p>
+</li>
+</ul>
+<div class="code-area-wrap"><div class="highlight-tools"><i class="fa fa-angle-down code-expand" aria-hidden="true"></i><div class="code_lang">shell</div><div class="copy-notice"></div><i class="fa fa-clipboard" aria-hidden="true"></i></div><figure class="highlight shell"><table><tbody><tr><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash">!/bin/bash</span></span><br><span class="line"></span><br><span class="line"><span class="meta">#</span><span class="bash">获取参数</span></span><br><span class="line">echo "$0 $1 $2"</span><br><span class="line">echo "$*"</span><br><span class="line">echo "$@"</span><br><span class="line">echo "参数个数=$#"</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="meta">#</span><span class="bash">out</span></span><br><span class="line">[root@localhost shell]# ./pos.sh 100 200</span><br><span class="line">./pos.sh 100 200</span><br><span class="line">100 200</span><br><span class="line">100 200</span><br><span class="line">参数个数=2</span><br></pre></td></tr></tbody></table></figure></div>
+
+<h4 id="预定义变量"><a href="#预定义变量" class="headerlink" title="预定义变量"></a>预定义变量</h4><ul>
+<li><p>$$ </p>
+<p>（功能描述：当前进程的进程号（PID）） </p>
+</li>
+<li><p>$! </p>
+<p>（功能描述：后台运行的最后一个进程的进程号（PID）） </p>
+</li>
+<li><p>$？ </p>
+<p>（功能描述：最后一次执行的命令的返回状态。如果这个变量的值为0，证明上一个命令正 确执行；如果这个变量的值为非0（具体是哪个数，由命令自己来决定），则证明上一个命令执行不正 确了。） </p>
+</li>
+</ul>
+<div class="code-area-wrap"><div class="highlight-tools"><i class="fa fa-angle-down code-expand" aria-hidden="true"></i><div class="code_lang">shell</div><div class="copy-notice"></div><i class="fa fa-clipboard" aria-hidden="true"></i></div><figure class="highlight shell"><table><tbody><tr><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash">!/bin/bash</span></span><br><span class="line">echo "当前进程号=$$"</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span><span class="bash">后台运行一个脚本 </span></span><br><span class="line">./hello.sh &</span><br><span class="line">echo "最后运行的进程号=$!"</span><br><span class="line"></span><br><span class="line">echo "执行的结果=$?"</span><br></pre></td></tr></tbody></table></figure></div>
+
+<h3 id="运算符"><a href="#运算符" class="headerlink" title="运算符"></a>运算符</h3><ul>
+<li><p>1) “$((运算式))”或“$[运算式]” </p>
+</li>
+<li><p>2) expr m + n  </p>
+<p>注意expr运算符间要有空格 </p>
+</li>
+<li><p>3) expr m - n </p>
+</li>
+<li><p>4) expr *, /, % 乘，除，取余 </p>
+</li>
+</ul>
+<div class="code-area-wrap"><div class="highlight-tools"><i class="fa fa-angle-down code-expand" aria-hidden="true"></i><div class="code_lang">shell</div><div class="copy-notice"></div><i class="fa fa-clipboard" aria-hidden="true"></i></div><figure class="highlight shell"><table><tbody><tr><td class="code"><pre><span class="line">RESULT1=$(((2+3)*4))</span><br><span class="line">echo "result1=$RESULT1"</span><br><span class="line"></span><br><span class="line">RESULT2=$[(2+4)*5]</span><br><span class="line">echo "result2=$RESULT2"</span><br><span class="line"></span><br><span class="line">TEMP=`expr 2 + 3`</span><br><span class="line">RESULT3=`expr $TEMP \* 4`</span><br><span class="line">echo "result3=$RESULT3"</span><br></pre></td></tr></tbody></table></figure></div>
+
+<h3 id="条件判断"><a href="#条件判断" class="headerlink" title="条件判断"></a>条件判断</h3><p><strong>[ condition ]（注意condition前后要有空格）</strong> </p>
+<p><strong>#非空返回true，可使用$?验证（0为true，>1为false</strong>） </p>
+<p>• </p>
+<h4 id="常用判断条件"><a href="#常用判断条件" class="headerlink" title="常用判断条件"></a>常用判断条件</h4><h5 id="两个整数的比较"><a href="#两个整数的比较" class="headerlink" title="两个整数的比较"></a>两个整数的比较</h5><blockquote>
+<p>= 字符串比较 </p>
+<p>-lt 小于 </p>
+<p>-le 小于等于 </p>
+<p>-eq 等于 </p>
+<p>-gt 大于 </p>
+<p>-ge 大于等于 </p>
+<p>-ne 不等于 </p>
+</blockquote>
+<h5 id="按照文件权限进行判断"><a href="#按照文件权限进行判断" class="headerlink" title="按照文件权限进行判断"></a>按照文件权限进行判断</h5><blockquote>
+<p>-r 有读的权限 </p>
+<p>-w 有写的权限 </p>
+<p>-x 有执行的权限 </p>
+</blockquote>
+<h5 id="按照文件类型进行判断"><a href="#按照文件类型进行判断" class="headerlink" title="按照文件类型进行判断"></a>按照文件类型进行判断</h5><blockquote>
+<p>-f 文件存在并且是一个常规的文件 </p>
+<p>-e 文件存在 </p>
+<p>-d 文件存在并是一个目录</p>
+</blockquote>
+<h4 id="实例"><a href="#实例" class="headerlink" title="实例"></a>实例</h4><div class="code-area-wrap"><div class="highlight-tools"><i class="fa fa-angle-down code-expand" aria-hidden="true"></i><div class="code_lang">shell</div><div class="copy-notice"></div><i class="fa fa-clipboard" aria-hidden="true"></i></div><figure class="highlight shell"><table><tbody><tr><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash">!/bin/bash</span></span><br><span class="line"></span><br><span class="line"><span class="meta">#</span><span class="bash">判断 字符串是否相等</span></span><br><span class="line">if [ "ok" = "ok" ]</span><br><span class="line">then</span><br><span class="line">        echo "equal"</span><br><span class="line">fi</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="meta">#</span><span class="bash">判断 数字大小 </span></span><br><span class="line">if [ 23 -gt 22 ]</span><br><span class="line">then</span><br><span class="line">        echo "大于"</span><br><span class="line">fi</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span><span class="bash">判断 文件是否存在</span></span><br><span class="line"></span><br><span class="line">if [ -e /root/shell/hello.sh ]  </span><br><span class="line">then</span><br><span class="line">        echo "存在"</span><br><span class="line">fi</span><br></pre></td></tr></tbody></table></figure></div>
+
+<h3 id="流程控制"><a href="#流程控制" class="headerlink" title="流程控制"></a>流程控制</h3><h4 id="if"><a href="#if" class="headerlink" title="if"></a>if</h4><h5 id="基本语法-2"><a href="#基本语法-2" class="headerlink" title="基本语法"></a>基本语法</h5><blockquote>
+<p>if [ 条件判断式 ];then  </p>
+<p>程序 </p>
+<p>fi  </p>
+<p>或者 </p>
+<p>if [ 条件判断式 ]  </p>
+<p>then  </p>
+<p>程序 </p>
+<p>elif [条件判断式] </p>
+<p>then </p>
+<p>程序 </p>
+<p>fi</p>
+<p><strong>注意事项：（1）[ 条件判断式 ]，中括号和条件判断式之间必须有空格</strong></p>
+</blockquote>
+<h5 id="案例"><a href="#案例" class="headerlink" title="案例"></a>案例</h5><div class="code-area-wrap"><div class="highlight-tools"><i class="fa fa-angle-down code-expand" aria-hidden="true"></i><div class="code_lang">shell</div><div class="copy-notice"></div><i class="fa fa-clipboard" aria-hidden="true"></i></div><figure class="highlight shell"><table><tbody><tr><td class="code"><pre><span class="line">if [ $1 -ge 60 ]</span><br><span class="line">then</span><br><span class="line">        echo "及格"</span><br><span class="line">elif [ $1 -lt 60 ]</span><br><span class="line">then</span><br><span class="line">        echo "不及格"</span><br><span class="line">fi</span><br></pre></td></tr></tbody></table></figure></div>
+
+<h4 id="case"><a href="#case" class="headerlink" title="case"></a>case</h4><h5 id="基本语法-3"><a href="#基本语法-3" class="headerlink" title="基本语法"></a>基本语法</h5><blockquote>
+<p>case $变量名 in  </p>
+<p>“值1”） </p>
+<p>如果变量的值等于值1，则执行程序1  </p>
+<p>;;  </p>
+<p>“值2”） </p>
+<p>如果变量的值等于值2，则执行程序2  </p>
+<p>;;  </p>
+<p>…省略其他分支…  </p>
+<p>*） </p>
+<p>如果变量的值都不是以上的值，则执行此程序 </p>
+<p>;;  </p>
+<p>esac </p>
+</blockquote>
+<h5 id="案例-1"><a href="#案例-1" class="headerlink" title="案例"></a>案例</h5><div class="code-area-wrap"><div class="highlight-tools"><i class="fa fa-angle-down code-expand" aria-hidden="true"></i><div class="code_lang">shell</div><div class="copy-notice"></div><i class="fa fa-clipboard" aria-hidden="true"></i></div><figure class="highlight shell"><table><tbody><tr><td class="code"><pre><span class="line">case $1 in</span><br><span class="line">"1")</span><br><span class="line">echo "周一"</span><br><span class="line">;;</span><br><span class="line">"2")</span><br><span class="line">echo "周二"</span><br><span class="line">;;</span><br><span class="line">*)</span><br><span class="line">echo "other"</span><br><span class="line">;;</span><br><span class="line">esac</span><br></pre></td></tr></tbody></table></figure></div>
+
+<h4 id="for"><a href="#for" class="headerlink" title="for"></a>for</h4><h5 id="基本语法-4"><a href="#基本语法-4" class="headerlink" title="基本语法"></a>基本语法</h5><blockquote>
+<ul>
+<li><p><strong>for</strong> <strong>变量</strong> <strong>in</strong> <strong>值**</strong>1** <strong>值**</strong>2** <strong>值**</strong>3…**  </p>
+<p><strong>do</strong>  </p>
+<p><strong>程序</strong> </p>
+<p><strong>done</strong> </p>
+</li>
+</ul>
+</blockquote>
+<blockquote>
+<ul>
+<li><p><strong>for (( 初始值;循环控制条件;变量变化 ))</strong>  </p>
+<p><strong>do</strong>  </p>
+<p><strong>程序</strong> </p>
+<p><strong>done</strong></p>
+</li>
+</ul>
+</blockquote>
+<h5 id="案例-2"><a href="#案例-2" class="headerlink" title="案例"></a>案例</h5><div class="code-area-wrap"><div class="highlight-tools"><i class="fa fa-angle-down code-expand" aria-hidden="true"></i><div class="code_lang">shell</div><div class="copy-notice"></div><i class="fa fa-clipboard" aria-hidden="true"></i></div><figure class="highlight shell"><table><tbody><tr><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash">取出命令行中的参数</span></span><br><span class="line">for i in "$@"</span><br><span class="line">do</span><br><span class="line">        echo "the num is $i"</span><br><span class="line">done</span><br><span class="line"><span class="meta">#</span><span class="bash">求和</span></span><br><span class="line">SUM=0</span><br><span class="line">for((i=1;i<=100;i++))</span><br><span class="line">do</span><br><span class="line">        SUM=$[$SUM+$i]</span><br><span class="line">done</span><br></pre></td></tr></tbody></table></figure></div>
+
+<h4 id="while"><a href="#while" class="headerlink" title="while"></a>while</h4><h5 id="基本语法-5"><a href="#基本语法-5" class="headerlink" title="基本语法"></a>基本语法</h5><blockquote>
+<p>while [ 条件判断式 ]  </p>
+<p>do  </p>
+<p>程序 </p>
+<p>done</p>
+</blockquote>
+<h5 id="案例-3"><a href="#案例-3" class="headerlink" title="案例"></a>案例</h5><div class="code-area-wrap"><div class="highlight-tools"><i class="fa fa-angle-down code-expand" aria-hidden="true"></i><div class="code_lang">shell</div><div class="copy-notice"></div><i class="fa fa-clipboard" aria-hidden="true"></i></div><figure class="highlight shell"><table><tbody><tr><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash">!/bin/bash</span></span><br><span class="line"></span><br><span class="line">SUM=0</span><br><span class="line">i=0</span><br><span class="line">while [ $i -lt $1 ]</span><br><span class="line">do</span><br><span class="line">        echo "$i"</span><br><span class="line">        SUM=$[$SUM+$i]</span><br><span class="line">        i=$[$i+1]</span><br><span class="line">done</span><br><span class="line">echo "sum=$SUM"</span><br></pre></td></tr></tbody></table></figure></div>
+
+<h4 id="read"><a href="#read" class="headerlink" title="read"></a><strong>read</strong></h4><p><strong>读取控制台输入</strong></p>
+<h5 id="基本语法-6"><a href="#基本语法-6" class="headerlink" title="基本语法"></a>基本语法</h5><blockquote>
+<p>read(选项)(参数) </p>
+<p>选项： </p>
+<p>-p：指定读取值时的提示符； </p>
+<p>-t：指定读取值时等待的时间（秒），如果没有在指定的时间内输入，就不再等待了。。 </p>
+<p>参数 </p>
+<p>变量：指定读取值的变量名 </p>
+</blockquote>
+<h5 id="案例-4"><a href="#案例-4" class="headerlink" title="案例"></a>案例</h5><div class="code-area-wrap"><div class="highlight-tools"><i class="fa fa-angle-down code-expand" aria-hidden="true"></i><div class="code_lang">shell</div><div class="copy-notice"></div><i class="fa fa-clipboard" aria-hidden="true"></i></div><figure class="highlight shell"><table><tbody><tr><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash">!/bin/bash</span></span><br><span class="line"></span><br><span class="line"><span class="meta">#</span><span class="bash">读取控制台输入的值</span></span><br><span class="line">read -p "请输入第一个值：" NUM1</span><br><span class="line"></span><br><span class="line">echo "$NUM1"</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="meta">#</span><span class="bash">十秒内输入一个值</span></span><br><span class="line"></span><br><span class="line">read -t 10 -p "请输入第二个值：" NUM2</span><br><span class="line"></span><br><span class="line">echo "$NUM2"</span><br><span class="line"></span><br><span class="line">echo "结束"</span><br></pre></td></tr></tbody></table></figure></div>
+
+<h3 id="函数"><a href="#函数" class="headerlink" title="函数"></a>函数</h3><h4 id="系统函数"><a href="#系统函数" class="headerlink" title="系统函数"></a>系统函数</h4><h5 id="basename-dirname"><a href="#basename-dirname" class="headerlink" title="basename/dirname"></a>basename/dirname</h5><h6 id="基本语法-7"><a href="#基本语法-7" class="headerlink" title="基本语法"></a>基本语法</h6><ul>
+<li><p>basename功能：返回完整路径最后 / 的部分，常用于获取文件名 </p>
+<p>basename [pathname] [suffix] </p>
+<p>basename [string] [suffix] </p>
+<p>（功能描述：basename命令会删掉所有的前缀包括最后一个（‘/’） 字符，然后将字符串显示出来。 </p>
+</li>
+<li><p>basename选项：<br>suffix为后缀，如果suffix被指定了，basename会将pathname或string中的suffix去掉。 </p>
+</li>
+<li><p>dirname 功能：返回完整路径最后 / 的前面的部分，常用于返回路径部分 dirname 文件绝对路径 （功能描述：从给定的包含绝对路径的文件名中去除文件名（非目录的部分）， 然后返回剩下的路径（目录的部分）） </p>
+</li>
+</ul>
+<h4 id="自定义函数"><a href="#自定义函数" class="headerlink" title="自定义函数"></a>自定义函数</h4><h5 id="基本语法-8"><a href="#基本语法-8" class="headerlink" title="基本语法"></a>基本语法</h5><p><strong>[ function ] funname[()]</strong> </p>
+<p><strong>{</strong> </p>
+<p><strong>Action;</strong> </p>
+<p><strong>[return int;]</strong> </p>
+<p><strong>}</strong></p>
+<p><strong>调用直接写函数名：funname [值]</strong> </p>
+<h5 id="案例-5"><a href="#案例-5" class="headerlink" title="案例"></a>案例</h5><div class="code-area-wrap"><div class="highlight-tools"><i class="fa fa-angle-down code-expand" aria-hidden="true"></i><div class="code_lang">shell</div><div class="copy-notice"></div><i class="fa fa-clipboard" aria-hidden="true"></i></div><figure class="highlight shell"><table><tbody><tr><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash">!/bin/bash</span></span><br><span class="line"></span><br><span class="line"><span class="meta">#</span><span class="bash">读取控制台输入的值</span></span><br><span class="line">read -p "请输入第一个值：" NUM1</span><br><span class="line"></span><br><span class="line">echo "$NUM1"</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="meta">#</span><span class="bash">读取控制台输入的值</span></span><br><span class="line">read -p "请输入第二个值：" NUM2</span><br><span class="line"></span><br><span class="line">echo "$NUM2"</span><br><span class="line"></span><br><span class="line">function getSum(){</span><br><span class="line">        SUM=$[$NUM1+$NUM2]</span><br><span class="line">        echo "和为$SUM"</span><br><span class="line">}</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span><span class="bash">调用getSum</span></span><br><span class="line">getSum $NUM1 $NUM2</span><br></pre></td></tr></tbody></table></figure></div>
+
+<h3 id="shell脚本备份数据库"><a href="#shell脚本备份数据库" class="headerlink" title="shell脚本备份数据库"></a>shell脚本备份数据库</h3><div class="code-area-wrap"><div class="highlight-tools"><i class="fa fa-angle-down code-expand" aria-hidden="true"></i><div class="code_lang">shell</div><div class="copy-notice"></div><i class="fa fa-clipboard" aria-hidden="true"></i></div><figure class="highlight shell"><table><tbody><tr><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash">!/bin/bash</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="meta">#</span><span class="bash">数据库备份</span></span><br><span class="line"><span class="meta">#</span><span class="bash">备份的路径</span></span><br><span class="line">BACKUP=/data/backup/db</span><br><span class="line"><span class="meta">#</span><span class="bash">当前时间作为文件名</span></span><br><span class="line">DATETIME=$( date +%Y_%m_%d_%H%M%S)</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span><span class="bash"><span class="built_in">echo</span> <span class="string">"<span class="variable">$DATETIME</span>"</span></span></span><br><span class="line"></span><br><span class="line">echo "=========> 开始备份"</span><br><span class="line">echo "=========> 备份路径：$BACKUP"</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span><span class="bash">主机</span></span><br><span class="line">HOST=localhost</span><br><span class="line"><span class="meta">#</span><span class="bash">用户名</span></span><br><span class="line">DB_USER=root</span><br><span class="line"><span class="meta">#</span><span class="bash">密码</span></span><br><span class="line">DB_PWD=123456</span><br><span class="line"><span class="meta">#</span><span class="bash">备份数据源库的名称</span></span><br><span class="line">DATABASE=testData</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span><span class="bash">创建备份的路径</span></span><br><span class="line"><span class="meta">#</span><span class="bash">如果路径存在，就使用，否则就创建</span></span><br><span class="line">[ ! -d "$BACKUP/$DATETIME" ] && mkdir -p "$BACKUP/$DATETIME"</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span><span class="bash">执行数据库备份指令</span></span><br><span class="line">mysqldump -u$DB_USER -p$DB_PWD --host=$HOST $DATABASE | gzip > $BACKUP/$DATETIME/$DATETIME.sql.gz</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="meta">#</span><span class="bash">打包并备份文件</span></span><br><span class="line">cd $BACKUP</span><br><span class="line">tar -zcvf $DATETIME.tar.gz $DATETIME</span><br><span class="line">rm -rf $DATETIME</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="meta">#</span><span class="bash">删除10天前的备份文件</span></span><br><span class="line">find $BACKUP -mtime +10 -name "*.tar.gz" -exec rm -rf {} \;</span><br><span class="line">echo "=========> 备份成功"</span><br></pre></td></tr></tbody></table></figure></div>
+
+<div class="code-area-wrap"><div class="highlight-tools"><i class="fa fa-angle-down code-expand" aria-hidden="true"></i><div class="code_lang">shell</div><div class="copy-notice"></div><i class="fa fa-clipboard" aria-hidden="true"></i></div><figure class="highlight shell"><table><tbody><tr><td class="code"><pre><span class="line">corntab -e</span><br><span class="line">30 12 * * * /root/shell/mysql.sh</span><br></pre></td></tr></tbody></table></figure></div>
+
 </body></html>]]></content>
       <categories>
         <category>Linux基础</category>
