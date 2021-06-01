@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://raptor1998.top/"/>
-  <updated>2021-05-27T02:43:43.726Z</updated>
+  <updated>2021-06-01T06:05:58.697Z</updated>
   <id>http://raptor1998.top/</id>
   
   <author>
@@ -15,6 +15,32 @@
   </author>
   
   <generator uri="https://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>计数器测试</title>
+    <link href="http://raptor1998.top/2021/06/01/%E8%AE%A1%E7%AE%97%E5%99%A8/"/>
+    <id>http://raptor1998.top/2021/06/01/%E8%AE%A1%E7%AE%97%E5%99%A8/</id>
+    <published>2021-05-31T16:00:00.000Z</published>
+    <updated>2021-06-01T06:05:58.697Z</updated>
+    
+    <content type="html"><![CDATA[<html lang="en"><head><link rel="stylesheet" class="aplayer-secondary-style-marker" href="\assets\css\APlayer.min.css"><script src="\assets\js\APlayer.min.js" class="aplayer-secondary-script-marker"></script><script class="meting-secondary-script-marker" src="\assets\js\Meting.min.js"></script></head><body><pre><code>&lt;meta charset="UTF-8"&gt;&lt;meta http-equiv="X-UA-Compatible" content="IE=edge"&gt;&lt;meta name="viewport" content="width=device-width, initial-scale=1.0"&gt;</code></pre>  <title>计数器</title>  <!-- 开发环境版本，包含了有帮助的命令行警告 --><pre><code>&lt;script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"&gt;&lt;/script&gt;</code></pre><meta name="generator" content="Hexo 4.2.1"><link rel="alternate" href="/atom.xml" title="raptor's blog" type="application/atom+xml"><pre><code>&lt;div class="app"&gt;</code></pre><p>​    &lt;h1 @click=”click_sub”&gt;-&lt;h1 @click=”click_add”&gt;+</p><pre><code>&lt;img v-show="num &gt; 3 &amp;&amp; num &lt; 5" src="https://cdn.jsdelivr.net/gh/Raptor1998/imghouse/untidy/20210524163940.jpg"</code></pre><p>​      alt=”xxxx”&gt;</p>  <pre><code>&lt;script&gt;</code></pre><p>​    new Vue({</p><p>​      el: “.app”,</p><p>​      data: {</p><p>​        num: 0</p><p>​      },</p><p>​      methods: {</p><p>​        click_sub() {</p><p>​          if (this.num &lt; 1) {</p><p>​            alert(“不可减小”)</p><p>​          }</p><p>​          else this.num -= 1</p><p>​        },</p><p>​        click_add() {</p><p>​          this.num += 1</p><p>​        }</p><p>​      }</p><p>​    })</p><p>  </p></body></html>]]></content>
+    
+    <summary type="html">
+    
+      
+      
+        &lt;html lang=&quot;en&quot;&gt;&lt;head&gt;&lt;link rel=&quot;stylesheet&quot; class=&quot;aplayer-secondary-style-marker&quot; href=&quot;\assets\css\APlayer.min.css&quot;&gt;&lt;script src=&quot;\assets\
+      
+    
+    </summary>
+    
+    
+      <category term="Spring" scheme="http://raptor1998.top/categories/Spring/"/>
+    
+    
+      <category term="Spring" scheme="http://raptor1998.top/tags/Spring/"/>
+    
+  </entry>
   
   <entry>
     <title>Hologres：云原生HSAP服务</title>
