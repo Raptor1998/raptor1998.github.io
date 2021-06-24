@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://raptor1998.top/"/>
-  <updated>2021-06-01T06:55:45.714Z</updated>
+  <updated>2021-06-24T08:29:31.342Z</updated>
   <id>http://raptor1998.top/</id>
   
   <author>
@@ -15,6 +15,32 @@
   </author>
   
   <generator uri="https://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>MySQL误删恢复</title>
+    <link href="http://raptor1998.top/2021/06/24/mysql%E8%AF%AF%E5%88%A0%E6%81%A2%E5%A4%8D/"/>
+    <id>http://raptor1998.top/2021/06/24/mysql%E8%AF%AF%E5%88%A0%E6%81%A2%E5%A4%8D/</id>
+    <published>2021-06-24T06:21:30.211Z</published>
+    <updated>2021-06-24T08:29:31.342Z</updated>
+    
+    <content type="html"><![CDATA[<html><head><link rel="stylesheet" class="aplayer-secondary-style-marker" href="\assets\css\APlayer.min.css"><script src="\assets\js\APlayer.min.js" class="aplayer-secondary-script-marker"></script><script class="meting-secondary-script-marker" src="\assets\js\Meting.min.js"></script></head><body><h1 id="MySQL误删恢复"><a href="#MySQL误删恢复" class="headerlink" title="MySQL误删恢复"></a>MySQL误删恢复</h1><h2 id="MySQL的binlog日志"><a href="#MySQL的binlog日志" class="headerlink" title="MySQL的binlog日志"></a>MySQL的binlog日志</h2><blockquote><p>作用</p></blockquote><ul><li>用于复制，在主从复制中，从库利用主库上的binlog进行重播，实现主从同步。</li><li>用于数据库的基于时间点的还原。</li></ul><blockquote><p>binlog的三种模式</p></blockquote><ol><li><p>statement：记录每一条修改数据的sql。</p><p>优点：日志文件比较小，节约io操作，性能较好。</p><p>缺点：只记录执行语句，所以还需要保证在主从执行的得到相同的结果。所以准确性差。</p></li><li><p>row：保存哪条记录被修改。</p><p>优点：准确性强。</p><p>缺点:日志文件比较大。</p></li><li><p>mixed：兼顾前两者的优点。</p></li></ol><blockquote><p>如何查看是否开启</p></blockquote><p>*<em>SHOW VARIABLES LIKE ‘log_bin%’; *</em></p><p><a href="https://cdn.jsdelivr.net/gh/Raptor1998/imghouse/untidy/20210624160512.png" data-fancybox="group" data-caption="binlog是否开启" class="fancybox"><img alt="binlog是否开启" title="binlog是否开启" data-src="https://cdn.jsdelivr.net/gh/Raptor1998/imghouse/untidy/20210624160512.png" src="https://cdn.jsdelivr.net/gh/raptor1998/imghouse/raptor1998_img/loading.gif" class="lazyload"></a></p><blockquote><p>如何配置？</p></blockquote><p>在<strong>[mysqld]</strong>节点下：</p><div class="code-area-wrap"><div class="highlight-tools"><i class="fa fa-angle-down code-expand" aria-hidden="true"></i><div class="code_lang">Code</div><div class="copy-notice"></div><i class="fa fa-clipboard" aria-hidden="true"></i></div><figure class="highlight plain"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">log-bin=/var/lib/mysql/mysql-bin</span><br><span class="line">binlog_format="ROW"</span><br></pre></td></tr></tbody></table></figure></div><h2 id="操作"><a href="#操作" class="headerlink" title="操作"></a>操作</h2><h3 id="基础命令"><a href="#基础命令" class="headerlink" title="基础命令"></a>基础命令</h3><p><strong>SHOW MASTER LOGS;</strong> 查看有哪些binlog文件</p><p><strong>show master status\G</strong> 查看当前是在那个日志文件中</p><p><strong>FLUSH LOGS;</strong>可以阶段日志文件，重定向到新的日志文件中</p><p><strong>show variables like ‘%datadir%’;</strong>查看日志文件位置</p><p>*<em>mysqlbinlog –no-defaults /var/lib/mysql/mysql-bin.000008 *</em>查看日志文件</p><h2 id="案例"><a href="#案例" class="headerlink" title="案例"></a>案例</h2><h3 id="模拟数据录入和删除"><a href="#模拟数据录入和删除" class="headerlink" title="模拟数据录入和删除"></a>模拟数据录入和删除</h3><p><a href="https://cdn.jsdelivr.net/gh/Raptor1998/imghouse/untidy/20210624161712.png" data-fancybox="group" data-caption="模拟删除" class="fancybox"><img alt="模拟删除" title="模拟删除" data-src="https://cdn.jsdelivr.net/gh/Raptor1998/imghouse/untidy/20210624161712.png" src="https://cdn.jsdelivr.net/gh/raptor1998/imghouse/raptor1998_img/loading.gif" class="lazyload"></a></p><h3 id="查看日志"><a href="#查看日志" class="headerlink" title="查看日志"></a>查看日志</h3><p>*<em>mysqlbinlog –no-defaults /var/lib/mysql/mysql-bin.000008 *</em>查看dangq日志的内容</p><p><a href="https://cdn.jsdelivr.net/gh/Raptor1998/imghouse/untidy/20210624162105.png" data-fancybox="group" data-caption="binlog日志内容" class="fancybox"><img alt="binlog日志内容" title="binlog日志内容" data-src="https://cdn.jsdelivr.net/gh/Raptor1998/imghouse/untidy/20210624162105.png" src="https://cdn.jsdelivr.net/gh/raptor1998/imghouse/raptor1998_img/loading.gif" class="lazyload"></a></p><h3 id="数据恢复"><a href="#数据恢复" class="headerlink" title="数据恢复"></a>数据恢复</h3><h4 id="根据起始时间"><a href="#根据起始时间" class="headerlink" title="根据起始时间"></a>根据起始时间</h4><p><strong>mysqlbinlog –no-defaults –start-datetime=’2021-06-24 16:14:01’ –stop-datetime=’2021-06-24 16:15:47’ /var/lib/mysql/mysql-bin.000008 | mysql -u root -p</strong></p><h4 id="根据起始点"><a href="#根据起始点" class="headerlink" title="根据起始点"></a>根据起始点</h4><p><strong>mysqlbinlog –no-defaults –start-position=445 –stop-position=1521 /var/lib/mysql/mysql-bin.000008 | mysql -u root -p</strong></p><p><a href="https://cdn.jsdelivr.net/gh/Raptor1998/imghouse/untidy/20210624162728.png" data-fancybox="group" data-caption="" class="fancybox"><img alt="" title="" data-src="https://cdn.jsdelivr.net/gh/Raptor1998/imghouse/untidy/20210624162728.png" src="https://cdn.jsdelivr.net/gh/raptor1998/imghouse/raptor1998_img/loading.gif" class="lazyload"></a></p></body></html>]]></content>
+    
+    <summary type="html">
+    
+      
+      
+        &lt;html&gt;&lt;head&gt;&lt;link rel=&quot;stylesheet&quot; class=&quot;aplayer-secondary-style-marker&quot; href=&quot;\assets\css\APlayer.min.css&quot;&gt;&lt;script src=&quot;\assets\js\APlayer
+      
+    
+    </summary>
+    
+    
+      <category term="MySQL" scheme="http://raptor1998.top/categories/MySQL/"/>
+    
+    
+      <category term="MySQL" scheme="http://raptor1998.top/tags/MySQL/"/>
+    
+  </entry>
   
   <entry>
     <title>md渲染HTML测试</title>
