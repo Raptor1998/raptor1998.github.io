@@ -1,6 +1,74 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title>Spring Bean</title>
+    <url>/2022/04/26/spring%20bean/</url>
+    <content><![CDATA[<html><head><link rel="stylesheet" class="aplayer-secondary-style-marker" href="\assets\css\APlayer.min.css"><script src="\assets\js\APlayer.min.js" class="aplayer-secondary-script-marker"></script><script class="meting-secondary-script-marker" src="\assets\js\Meting.min.js"></script></head><body><h1 id="Spring-中-bean"><a href="#Spring-中-bean" class="headerlink" title="Spring 中 bean"></a>Spring 中 bean</h1><h2 id="Scope"><a href="#Scope" class="headerlink" title="Scope"></a>Scope</h2><p><strong>Spring 的 bean 作用域（scope）：</strong></p>
+<ul>
+<li>singleton:单例，默认作用域。</li>
+<li>prototype:原型，每次创建一个新对象。</li>
+<li>request:请求，每次Http请求创建一个新对象，适用于WebApplicationContext环境下。</li>
+<li>session:会话，同一个会话共享一个实例，不同会话使用不用的实例。</li>
+<li>global-session:全局会话，所有会话共享一个实例。</li>
+</ul>
+<h2 id="线程安全问题"><a href="#线程安全问题" class="headerlink" title="线程安全问题"></a>线程安全问题</h2><h3 id="单例Bean"><a href="#单例Bean" class="headerlink" title="单例Bean"></a><strong>单例Bean</strong></h3><p>对于单例Bean,所有线程都共享一个单例实例Bean，因此是存在资源的竞争。如果单例Bean是一个<strong>无状态Bean</strong>（<strong>有状态就是有数据存储功能，无状态就是不会保存数据</strong>），也就是线程中的操作不会对Bean的成员执行查询以外的操作，那么这个单例Bean是线程安全的。比如Spring mvc 的 Controller、Service、Dao等，这些Bean大多是无状态的，只关注于方法本身。</p>
+<p><strong>spring单例，为什么controller、service和dao确能保证线程安全？</strong></p>
+<p>Spring中的Bean默认是单例模式的，框架并没有对bean进行多线程的封装处理。<br>实际上大部分时间Bean是无状态的（比如Dao） 所以说在某种程度上来说Bean其实是安全的。</p>
+<ol>
+<li>在@Controller/@Service等容器中，默认情况下，scope值是单例-singleton的，也是线程不安全的。</li>
+<li>尽量不要在@Controller/@Service等容器中定义静态变量，不论是单例(singleton)还是多实例(prototype)他都是线程不安全的。</li>
+<li>默认注入的Bean对象，在不设置scope的时候他也是线程不安全的。</li>
+<li>一定要定义变量的话，用ThreadLocal来封装，这个是线程安全的</li>
+</ol>
+<h3 id="原型Bean"><a href="#原型Bean" class="headerlink" title="原型Bean"></a><strong>原型Bean</strong></h3><p>对于原型Bean,每次创建一个新对象，也就是线程之间并不存在Bean共享，自然是不会有线程安全的问题。</p>
+<h1 id="bean的循环依赖"><a href="#bean的循环依赖" class="headerlink" title="bean的循环依赖"></a>bean的循环依赖</h1><h2 id="三级缓存"><a href="#三级缓存" class="headerlink" title="三级缓存"></a>三级缓存</h2><h3 id="singletonObjects"><a href="#singletonObjects" class="headerlink" title="singletonObjects"></a>singletonObjects</h3><p>完成初始化的单例对象的 cache，这里的 bean 经历过 实例化-&gt;属性填充-&gt;初始化 以及各种后置处理（一级缓存）。</p>
+<h3 id="earlySingletonObjects"><a href="#earlySingletonObjects" class="headerlink" title="earlySingletonObjects"></a>earlySingletonObjects</h3><p>存放原始的 bean 对象（完成实例化但是尚未填充属性和初始化），仅仅能作为指针提前曝光，被其他 bean 所引用，用于解决循环依赖的 （二级缓存）。</p>
+<h3 id="singletonFactories"><a href="#singletonFactories" class="headerlink" title="singletonFactories"></a>singletonFactories</h3><p>在 bean 实例化完之后，属性填充以及初始化之前，如果允许提前曝光，Spring 会将实例化后的 bean 提前曝光，也就是把该 bean 转换成 beanFactory 并加入到 singletonFactories（三级缓存）。</p>
+<h2 id="创建bean"><a href="#创建bean" class="headerlink" title="创建bean"></a>创建bean</h2><h3 id="bean创建过程"><a href="#bean创建过程" class="headerlink" title="bean创建过程"></a>bean创建过程</h3><p>getBean-&gt;实例化-&gt;属性填充-&gt;初始化（自行bean的初始化方法，如afterPropertiesSet）</p>
+<p><a href="https://cdn.jsdelivr.net/gh/raptor1998/imghouse/raptor1998_img/loading.gif" data-fancybox="group" data-caption="image-20220426163422045" class="fancybox"><img alt="image-20220426163422045" data-src="https://cdn.jsdelivr.net/gh/Raptor1998/imghouse/untidy/20220426171132.png" src="https://cdn.jsdelivr.net/gh/raptor1998/imghouse/raptor1998_img/loading.gif" class="lazyload" title="image-20220426163422045"></a></p>
+<h3 id="循环依赖"><a href="#循环依赖" class="headerlink" title="循环依赖"></a>循环依赖</h3><h4 id="问题出现"><a href="#问题出现" class="headerlink" title="问题出现"></a>问题出现</h4><p><a href="https://cdn.jsdelivr.net/gh/raptor1998/imghouse/raptor1998_img/loading.gif" data-fancybox="group" data-caption="image-20220426163511580" class="fancybox"><img alt="image-20220426163511580" data-src="https://cdn.jsdelivr.net/gh/Raptor1998/imghouse/untidy/20220426171154.png" src="https://cdn.jsdelivr.net/gh/raptor1998/imghouse/raptor1998_img/loading.gif" class="lazyload" title="image-20220426163511580"></a></p>
+<h4 id="半成品提前暴露"><a href="#半成品提前暴露" class="headerlink" title="半成品提前暴露"></a>半成品提前暴露</h4><p><a href="https://cdn.jsdelivr.net/gh/raptor1998/imghouse/raptor1998_img/loading.gif" data-fancybox="group" data-caption="image-20220426163608653" class="fancybox"><img alt="image-20220426163608653" data-src="https://cdn.jsdelivr.net/gh/Raptor1998/imghouse/untidy/20220426171200.png" src="https://cdn.jsdelivr.net/gh/raptor1998/imghouse/raptor1998_img/loading.gif" class="lazyload" title="image-20220426163608653"></a></p>
+<p><strong>当b需要a 的时候，去单例池中寻找a，没找到；去半成品池中寻找a，找到以后赋值并将b放入单例池；然后将b赋值给a，并将半成品池中的a移除</strong></p>
+<p><a href="https://cdn.jsdelivr.net/gh/raptor1998/imghouse/raptor1998_img/loading.gif" data-fancybox="group" data-caption="image-20220426163827610" class="fancybox"><img alt="image-20220426163827610" data-src="https://cdn.jsdelivr.net/gh/Raptor1998/imghouse/untidy/20220426171208.png" src="https://cdn.jsdelivr.net/gh/raptor1998/imghouse/raptor1998_img/loading.gif" class="lazyload" title="image-20220426163827610"></a></p>
+<h3 id="QA"><a href="#QA" class="headerlink" title="QA"></a>QA</h3><p><strong>二级缓存就解决了循环依赖问题，为什么还需要三级缓存？</strong></p>
+<p><strong>解决aop引用问题，当对象有aop增强的时候，a引用的是b的代理对象，而不是b的原始对象，b同理，需要a的代理对象。此时b再去半成品池去取对象，取得是a的原始对象，而不是代理对象。</strong></p>
+<p><a href="https://cdn.jsdelivr.net/gh/raptor1998/imghouse/raptor1998_img/loading.gif" data-fancybox="group" data-caption="image-20220426164008035" class="fancybox"><img alt="image-20220426164008035" data-src="https://cdn.jsdelivr.net/gh/Raptor1998/imghouse/untidy/20220426171219.png" src="https://cdn.jsdelivr.net/gh/raptor1998/imghouse/raptor1998_img/loading.gif" class="lazyload" title="image-20220426164008035"></a></p>
+<h3 id="aop的代理实现"><a href="#aop的代理实现" class="headerlink" title="aop的代理实现"></a>aop的代理实现</h3><p><a href="https://cdn.jsdelivr.net/gh/raptor1998/imghouse/raptor1998_img/loading.gif" data-fancybox="group" data-caption="image-20220426162945335" class="fancybox"><img alt="image-20220426162945335" data-src="https://cdn.jsdelivr.net/gh/Raptor1998/imghouse/untidy/20220426171222.png" src="https://cdn.jsdelivr.net/gh/raptor1998/imghouse/raptor1998_img/loading.gif" class="lazyload" title="image-20220426162945335"></a></p>
+<p><strong>aop是初始化的后置处理中进行增强，如上图所示，bean的后置处理器中有一个aop处理器，有两个入口，一个事postProcessAfterInitialization（后置处理）和getEarlyBEanReference（提前处理）</strong></p>
+<h3 id="添加工厂池"><a href="#添加工厂池" class="headerlink" title="添加工厂池"></a>添加工厂池</h3><p><strong>对象初始化完成之后，进行后置处理，当b对a有提前引用的时候，执行factory(a)，从而创建a的动态代理，并且将a的代理放到半成品池中，将a的半成品填充到b的属性中去，然后执行b的后置处理，将b放到单例池中去，（在执行createBeanInstance(“b”)的时候，也会去工厂池创建factory(b)，不过在创建b的过程中，没有人提前引用b，所以工厂池中的对象会被移除）</strong></p>
+<p><strong>当a获取到b的代理对象之后，没必要在执行后置处理，而是直接从半成品池中的a移动到单例池中去，并且移除工厂池中的a</strong></p>
+<p><a href="https://cdn.jsdelivr.net/gh/raptor1998/imghouse/raptor1998_img/loading.gif" data-fancybox="group" data-caption="image-20220426164937768" class="fancybox"><img alt="image-20220426164937768" data-src="https://cdn.jsdelivr.net/gh/Raptor1998/imghouse/untidy/20220426171231.png" src="https://cdn.jsdelivr.net/gh/raptor1998/imghouse/raptor1998_img/loading.gif" class="lazyload" title="image-20220426164937768"></a></p>
+<p><a href="https://cdn.jsdelivr.net/gh/raptor1998/imghouse/raptor1998_img/loading.gif" data-fancybox="group" data-caption="image-20220426165309219" class="fancybox"><img alt="image-20220426165309219" data-src="https://cdn.jsdelivr.net/gh/Raptor1998/imghouse/untidy/20220426171241.png" src="https://cdn.jsdelivr.net/gh/raptor1998/imghouse/raptor1998_img/loading.gif" class="lazyload" title="image-20220426165309219"></a></p>
+<p><a href="https://cdn.jsdelivr.net/gh/raptor1998/imghouse/raptor1998_img/loading.gif" data-fancybox="group" data-caption="image-20220426165805873" class="fancybox"><img alt="image-20220426165805873" data-src="https://cdn.jsdelivr.net/gh/Raptor1998/imghouse/untidy/20220426171250.png" src="https://cdn.jsdelivr.net/gh/raptor1998/imghouse/raptor1998_img/loading.gif" class="lazyload" title="image-20220426165805873"></a></p>
+<p><a href="https://cdn.jsdelivr.net/gh/raptor1998/imghouse/raptor1998_img/loading.gif" data-fancybox="group" data-caption="image-20220426165736641" class="fancybox"><img alt="image-20220426165736641" data-src="https://cdn.jsdelivr.net/gh/Raptor1998/imghouse/untidy/20220426171259.png" src="https://cdn.jsdelivr.net/gh/raptor1998/imghouse/raptor1998_img/loading.gif" class="lazyload" title="image-20220426165736641"></a></p>
+<h1 id="分别用一二三级缓存解决循环依赖的方案"><a href="#分别用一二三级缓存解决循环依赖的方案" class="headerlink" title="分别用一二三级缓存解决循环依赖的方案"></a>分别用一二三级缓存解决循环依赖的方案</h1><h2 id="一级缓存"><a href="#一级缓存" class="headerlink" title="一级缓存"></a>一级缓存</h2><h3 id="不考虑aop使用—级缓存解决循环依赖"><a href="#不考虑aop使用—级缓存解决循环依赖" class="headerlink" title="不考虑aop使用—级缓存解决循环依赖"></a>不考虑aop使用—级缓存解决循环依赖</h3><ol>
+<li>创建A对象,放到缓存中，这时候为A对象注入属性</li>
+<li>创建B放到缓存，从缓存中获得A对象，将B对象返回给A对象(这时候如果不考虑aop 一级缓存就可以解决循环依赖的问题了)</li>
+</ol>
+<h3 id="考虑aop时-一级缓存无法解决循环依赖的问题"><a href="#考虑aop时-一级缓存无法解决循环依赖的问题" class="headerlink" title="考虑aop时,一级缓存无法解决循环依赖的问题"></a>考虑aop时,一级缓存无法解决循环依赖的问题</h3><p> 因为初始化操作必须放在aop代理之前, 否则导致初始化的时候无法改变代理对象的属性值，假设A和B对象互相引用，且A和B对象都使用aop进行了增强，则按照上面的逻辑，A对象放到缓存后，需要注入B对象,而缓存中没有B对象，则需要去创建B对象，这时候B对象可以从缓存中获得A对象，而B对象拿到的是没有进行aop增强的A对象，这时候就算把初始化B对象和为B对象生成aop代理的业务逻辑放在这，也只能保证A对象获得的是aop代理过的B对象，而B对象中的A对象是没有经过aop增强的，且经过jdk/cglib动态代理后对象的属性值是没有办法改变的，这时候为A生成aop增强过的对象也无法替换B对象中的A对象，所以一级缓存无法解决。</p>
+<h2 id="二级缓存"><a href="#二级缓存" class="headerlink" title="二级缓存"></a>二级缓存</h2><p>二级缓存可以解决循环依赖，并且也可以解决循环依赖中的依赖对象被aop代理问题</p>
+<p>就是普通对象初始化完成后，然后走到 getSingleton方法通过三级缓存创建对象,<br>假设A和B循环依赖,并且A和B都通过aop增强，假设先创建A，则当为A中注入B时，发现B没有，就会去创建B，如果使用二级缓存，这时候直接通过对象工厂创建A的aop对象<br>，放在一级缓存中，相当于A对象创建好了，这时候创建好B对象后，返回继续创建A对象，这时候按顺序，A的属性注入后该进行初始化A对象了，但这时候在创建B时已经把A对象放到一级缓存中了，这时候如果另一个线程来获取就会获得还没有完全初始化的<br>A对象（框架是单线程加载的，当框架加载好所有对象都创建好了，因该不会出现不安<br>全发布的情况），这时候也就会出现违背Spring创建对象的原则，即在对象没有完全初始化的时候就出现在了一级缓存中，Spring创建对象的原则是在对象被完全初始化后才能被放到缓存中，被外界获取。</p>
+<h2 id="三级缓存-1"><a href="#三级缓存-1" class="headerlink" title="三级缓存"></a>三级缓存</h2><p><strong>A 假设和 B 相互引用，且都被 aop 增强</strong> </p>
+<ol>
+<li>A 对象先封装一个回调函数到三级循环中，这个接口里封装的是 aop 使用 bean 来创建 aop 代理类的方法</li>
+<li>这时候如果为 A 对象中有 B 类的属性，需要把 B 注入到 A 中</li>
+<li>这时候没有创建 B 类的对象，就去创建，也是封装一个回调函数到三级缓存中 </li>
+<li>这时候需要往 B中注入 A ，发现 A 在三级循环中，这时候会调用回调函数的 getObject 方法获得 aop 增强过的 A 对象，放入二级缓存中，因为 A 对象没有初始化完成，这个对象是不完整的，其实也可直接放使用二级缓存来解决循环依赖 </li>
+<li>但是用二级缓存的话会破坏 spring 创建对象的原则，一级缓存存放的是已经<br>初始化过的完整的对象，二级三级都是半成品， Spring 更喜欢把所有的普通 Bean 都初始化完成，再处理代理对象的初始化。</li>
+</ol>
+<h1 id="reference"><a href="#reference" class="headerlink" title="reference"></a>reference</h1><p><a href="https://blog.csdn.net/smilehappiness/article/details/119712824" target="_blank" rel="noopener">Spring框架中的单例bean是线程安全的吗?</a></p>
+<p><a href="https://baijiahao.baidu.com/s?id=1677105782547823661&amp;wfr=spider&amp;for=pc" target="_blank" rel="noopener">循环依赖问题</a></p>
+<p><a href="https://blog.csdn.net/qq_39552268/article/details/122502988" target="_blank" rel="noopener">分别用一二三级缓存解决循环依赖的方案</a></p>
+<p><a href="https://www.bilibili.com/video/BV1ET4y1N7Sp?spm_id_from=333.337.search-card.all.click" target="_blank" rel="noopener">第二次讲Spring循环依赖，时长16分钟，我保证每一秒都是精华</a></p>
+</body></html>]]></content>
+      <categories>
+        <category>Spring</category>
+      </categories>
+      <tags>
+        <tag>Spring</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>Spring IOC simple version</title>
     <url>/2022/04/23/spring%20ioc/</url>
     <content><![CDATA[<html><head><link rel="stylesheet" class="aplayer-secondary-style-marker" href="\assets\css\APlayer.min.css"><script src="\assets\js\APlayer.min.js" class="aplayer-secondary-script-marker"></script><script class="meting-secondary-script-marker" src="\assets\js\Meting.min.js"></script></head><body><h1 id="Spring-IOC"><a href="#Spring-IOC" class="headerlink" title="Spring-IOC"></a>Spring-IOC</h1><p><strong>a simple version of spring IOC and AOP Demo</strong></p>
