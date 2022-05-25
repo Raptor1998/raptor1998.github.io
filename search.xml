@@ -25,7 +25,7 @@
   <entry>
     <title>Spring Transaction</title>
     <url>/2022/05/03/spring%20transaction/</url>
-    <content><![CDATA[<html><head><link rel="stylesheet" class="aplayer-secondary-style-marker" href="\assets\css\APlayer.min.css"><script src="\assets\js\APlayer.min.js" class="aplayer-secondary-script-marker"></script><script class="meting-secondary-script-marker" src="\assets\js\Meting.min.js"></script></head><body><h1 id="Transaction"><a href="#Transaction" class="headerlink" title="Transaction"></a>Transaction</h1><p><a href="https://cdn.jsdelivr.net/gh/raptor1998/imghouse/raptor1998_img/loading.gif" data-fancybox="group" data-caption="img.png" class="fancybox"><img alt="img.png" data-src="https://cdn.jsdelivr.net/gh/Raptor1998/imghouse/untidy/20220505094129.png" src="https://cdn.jsdelivr.net/gh/raptor1998/imghouse/raptor1998_img/loading.gif" class="lazyload" title="img.png"></a></p>
+    <content><![CDATA[<html><head><link rel="stylesheet" class="aplayer-secondary-style-marker" href="\assets\css\APlayer.min.css"><script src="\assets\js\APlayer.min.js" class="aplayer-secondary-script-marker"></script><script class="meting-secondary-script-marker" src="\assets\js\Meting.min.js"></script></head><body><h1 id="Transaction"><a href="#Transaction" class="headerlink" title="Transaction"></a>Transaction</h1><p><a href="https://cdn.jsdelivr.net/gh/Raptor1998/imghouse/untidy/20220505094129.png" data-fancybox="group" data-caption="img.png" class="fancybox"><img alt="img.png" title="img.png" data-src="https://cdn.jsdelivr.net/gh/Raptor1998/imghouse/untidy/20220505094129.png" src="https://cdn.jsdelivr.net/gh/raptor1998/imghouse/raptor1998_img/loading.gif" class="lazyload"></a></p>
 <h2 id="什么是事务"><a href="#什么是事务" class="headerlink" title="什么是事务"></a>什么是事务</h2><p>事务是逻辑上的一组操作，要么都执行，要么都不执行。</p>
 <p>事务最经典也经常被拿出来说例子就是转账了。假如小明要给小红转账 1000 元，这个转账会涉及到两个关键操作就是：将小明的余额减少 1000 元，将小红的余额增加 1000 元。万一在这两个操作之间突然出现错误比如银行系统崩溃，导致小明余额减少而小红的余额没有增加，这样就不对了。事务就是保证这两个关键操作要么都成功，要么都要失败。</p>
 <h2 id="事务的ACID"><a href="#事务的ACID" class="headerlink" title="事务的ACID"></a>事务的<code>ACID</code></h2><ol>
@@ -60,6 +60,7 @@
 <div class="code-area-wrap"><div class="highlight-tools"><i class="fa fa-angle-down code-expand" aria-hidden="true"></i><div class="code_lang">java</div><div class="copy-notice"></div><i class="fa fa-clipboard" aria-hidden="true"></i></div><figure class="highlight java"><table><tbody><tr><td class="code"><pre><span class="line">ThreadLocal&lt;Boolean&gt; hasTransaction = <span class="keyword">new</span> ThreadLocal();</span><br></pre></td></tr></tbody></table></figure></div>
 
 <h2 id="reference"><a href="#reference" class="headerlink" title="reference"></a>reference</h2><p><a href="https://blog.csdn.net/qq_34115899/article/details/115602002" target="_blank" rel="noopener">事务的7种传播行为</a></p>
+<h2 id="代码地址"><a href="#代码地址" class="headerlink" title="代码地址"></a>代码地址</h2><p><a href="https://github.com/Raptor1998" target="_blank" rel="noopener">Raptor1998</a>/<strong><a href="https://github.com/Raptor1998/spring-transaction" target="_blank" rel="noopener">spring-transaction</a></strong></p>
 </body></html>]]></content>
       <categories>
         <category>Spring</category>
@@ -207,6 +208,7 @@
 
 <h1 id="reference"><a href="#reference" class="headerlink" title="reference"></a>reference</h1><p><a href="https://www.pdai.tech/md/spring/spring-x-framework-ioc.html" target="_blank" rel="noopener">Spring基础 - Spring核心之控制反转(IOC)</a></p>
 <p><a href="https://www.bilibili.com/video/BV1AV411i7VH" target="_blank" rel="noopener">楠哥教你学Java之3小时搞懂Spring IoC核心源码</a></p>
+<h1 id="github"><a href="#github" class="headerlink" title="github"></a>github</h1><p><a href="https://github.com/Raptor1998" target="_blank" rel="noopener">Raptor1998</a>/<strong><a href="https://github.com/Raptor1998/Spring-IOC" target="_blank" rel="noopener">Spring-IOC</a></strong></p>
 </body></html>]]></content>
       <categories>
         <category>Spring</category>
