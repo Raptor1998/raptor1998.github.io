@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
-    <title>ByteDance New Group</title>
+    <title>ByteDance Month 2</title>
     <url>/2022/07/10/ByteDance4/</url>
     <content><![CDATA[<html><head><link rel="stylesheet" class="aplayer-secondary-style-marker" href="/assets/css/APlayer.min.css"><script src="/assets/js/APlayer.min.js" class="aplayer-secondary-script-marker"></script><script class="meting-secondary-script-marker" src="/assets/js/Meting.min.js"></script></head><body><h1 id="业务"><a href="#业务" class="headerlink" title="业务"></a>业务</h1><h2 id="需求测试"><a href="#需求测试" class="headerlink" title="需求测试"></a>需求测试</h2><hr>
 <p>呜呜呜，哒哒哒。。。呜呜呜，哒哒哒。。。</p>
 <hr>
-<p><a href="https://cdn.jsdelivr.net/gh/raptor1998/imghouse/byte/202208142218372.png" data-fancybox="group" data-caption="" class="fancybox"><img alt="" title="" data-src="https://cdn.jsdelivr.net/gh/raptor1998/imghouse/byte/202208142218372.png" src="https://cdn.jsdelivr.net/gh/raptor1998/imghouse/raptor1998_img/loading.gif" class="lazyload"></a><br>我的状态完全和樱木刚开始接触篮球一样，啥也不会，自己还挺有想法</p>
+<p><a href="https://cdn.jsdelivr.net/gh/raptor1998/imghouse/raptor1998_img/loading.gif" data-fancybox="group" data-caption="" class="fancybox"><img alt="" data-src="https://cdn.jsdelivr.net/gh/raptor1998/imghouse/byte/202208142218372.png" src="https://cdn.jsdelivr.net/gh/raptor1998/imghouse/raptor1998_img/loading.gif" class="lazyload" title=""></a><br>我的状态完全和樱木刚开始接触篮球一样，啥也不会，自己还挺有想法</p>
 <blockquote>
 <p>如何评价“樱木花道”这个人物？</p>
 </blockquote>
@@ -16,10 +16,10 @@
 <p>实习到目前已经一个月出头，前面两周都在看文档，熟悉业务，参与回归测试，其实对于自身技术上的成长可以说是几乎没有，只能靠自己探索内部基础工具的实现原理学习技术，毕竟业务这东西，对于目前的工作意义非凡，但对于个人成长来说，更多的还是业务背后的技术沉淀</p>
 <p>第一次独立处理需求，PM是新加坡人，万幸的是她讲中文，还不算难理解，对于测试用例的编写还算有点新的理解，第一次写，更多的还是站在开发的角度去考虑事情，去扣一些极端操作，反而忽略了用户操作，对于功能测试来讲，更多的还是偏重于用户角度，这时其实就在思考测试岗位存在的意义了，毕竟之前在校内开发，写完代码，自测没问题就直接上了，并没有专门的同学把关</p>
 <p>目前收获最大的的是学习需求上线流程，敏捷迭代的各时间点工作</p>
-<h2 id="换线"><a href="#换线" class="headerlink" title="换线"></a>换线</h2><p><a href="https://cdn.jsdelivr.net/gh/raptor1998/imghouse/byte/202208142211306.png" data-fancybox="group" data-caption="" class="fancybox"><img alt="" title="" data-src="https://cdn.jsdelivr.net/gh/raptor1998/imghouse/byte/202208142211306.png" src="https://cdn.jsdelivr.net/gh/raptor1998/imghouse/raptor1998_img/loading.gif" class="lazyload"></a></p>
+<h2 id="换线"><a href="#换线" class="headerlink" title="换线"></a>换线</h2><p><a href="https://cdn.jsdelivr.net/gh/raptor1998/imghouse/raptor1998_img/loading.gif" data-fancybox="group" data-caption="" class="fancybox"><img alt="" data-src="https://cdn.jsdelivr.net/gh/raptor1998/imghouse/byte/202208142211306.png" src="https://cdn.jsdelivr.net/gh/raptor1998/imghouse/raptor1998_img/loading.gif" class="lazyload" title=""></a></p>
 <p>本来高高兴兴，ld拉了一个群，群里只有ld、我、mentor和未来的新mentor，就说了一句话，长期支持一下非中机器人的方向，当我看到这个消息和上图表情一模一样，难顶。。。</p>
 <p>SMB的业务还没完全理解，刚处理了两个需求，还都没有完全上线，一个外部依赖，另一个历史逻辑太多，理解的有点慢，现在又要去接触一个新的业务，我这短短几个月的实习里，若是按照目前的强度来看，我这实习期间可能并不会接触多过多的东西</p>
-<h2 id="新业务线"><a href="#新业务线" class="headerlink" title="新业务线"></a>新业务线</h2><p><a href="https://cdn.jsdelivr.net/gh/raptor1998/imghouse/byte/202208142216915.png" data-fancybox="group" data-caption="" class="fancybox"><img alt="" title="" data-src="https://cdn.jsdelivr.net/gh/raptor1998/imghouse/byte/202208142216915.png" src="https://cdn.jsdelivr.net/gh/raptor1998/imghouse/raptor1998_img/loading.gif" class="lazyload"></a></p>
+<h2 id="新业务线"><a href="#新业务线" class="headerlink" title="新业务线"></a>新业务线</h2><p><a href="https://cdn.jsdelivr.net/gh/raptor1998/imghouse/raptor1998_img/loading.gif" data-fancybox="group" data-caption="" class="fancybox"><img alt="" data-src="https://cdn.jsdelivr.net/gh/raptor1998/imghouse/byte/202208142216915.png" src="https://cdn.jsdelivr.net/gh/raptor1998/imghouse/raptor1998_img/loading.gif" class="lazyload" title=""></a></p>
 <p>SMB一共处理了两个需求，还有一个因为外部依赖没能上线，现在新业务线是基础服务，业务好理解，就是智能问答，多轮对话，提供工具，为客增赋能，让销售们更好的、更快的解决问题，类似于辅助型对话机器人</p>
 <h3 id="业务理解"><a href="#业务理解" class="headerlink" title="业务理解"></a>业务理解</h3><p>问答：通过机器人发起提问，权限以及其他的一些校验通过后，将信息打包给KE，KE进行意图分析（KE可以理解为卧龙为KE提供了训练模型的数据，读书期间研究方向有部分nlp相关，目前在做的主要是自动构建领域KG），KE将分析的数据返回飞书卡片，测试根据会话人的部分、角色等判定是否返回某些FAQ的答案，然后根据用户的交互行为卧龙返回对应数据</p>
 <p>人工：会话服务将从KE获取的用户意图以及用户部门等信息，发送给卧龙后台，卧龙后台查找符合条件的值班客服信息并返回给会话服务</p>
@@ -35,7 +35,7 @@
       </tags>
   </entry>
   <entry>
-    <title>ByteDance Month1</title>
+    <title>ByteDance Week 4</title>
     <url>/2022/06/28/ByteDance2/</url>
     <content><![CDATA[<html><head><link rel="stylesheet" class="aplayer-secondary-style-marker" href="/assets/css/APlayer.min.css"><script src="/assets/js/APlayer.min.js" class="aplayer-secondary-script-marker"></script><script class="meting-secondary-script-marker" src="/assets/js/Meting.min.js"></script></head><body><h1 id="入职第四周"><a href="#入职第四周" class="headerlink" title="入职第四周"></a>入职第四周</h1><h2 id="感受"><a href="#感受" class="headerlink" title="感受"></a>感受</h2><p> <a href="https://cdn.jsdelivr.net/gh/raptor1998/imghouse/raptor1998_img/loading.gif" data-fancybox="group" data-caption="" class="fancybox"><img alt="" data-src="https://cdn.jsdelivr.net/gh/raptor1998/imghouse/byte/202208142146986.png" src="https://cdn.jsdelivr.net/gh/raptor1998/imghouse/raptor1998_img/loading.gif" class="lazyload" title=""></a></p>
 <p><a href="https://cdn.jsdelivr.net/gh/raptor1998/imghouse/raptor1998_img/loading.gif" data-fancybox="group" data-caption="" class="fancybox"><img alt="" data-src="https://cdn.jsdelivr.net/gh/raptor1998/imghouse/byte/202208142128353.jpg" src="https://cdn.jsdelivr.net/gh/raptor1998/imghouse/raptor1998_img/loading.gif" class="lazyload" title=""></a></p>
@@ -73,7 +73,7 @@
       </tags>
   </entry>
   <entry>
-    <title>ByteDance myGroup</title>
+    <title>ByteDance week 3</title>
     <url>/2022/06/25/ByteDance5/</url>
     <content><![CDATA[<html><head><link rel="stylesheet" class="aplayer-secondary-style-marker" href="/assets/css/APlayer.min.css"><script src="/assets/js/APlayer.min.js" class="aplayer-secondary-script-marker"></script><script class="meting-secondary-script-marker" src="/assets/js/Meting.min.js"></script></head><body><h1 id="业务理解"><a href="#业务理解" class="headerlink" title="业务理解"></a>业务理解</h1><p>从高空看program这块业务，实际上通过cronjob的手段将符合预定条件的广告主添加进某个流程中（Handraiser、payment ready……），并赋予一些相关的状态标签，切换拥有者，为owner添加其目前的分配数量，判断条件来源于tcc</p>
 <p>目前理解的tcc是类似spring cloud config </p>
@@ -83,9 +83,9 @@
 <p>感觉mentor怀孕有点不喜欢说话，每次碰到我也不知道说啥玩意好，可能是因为是小组长，不能跟你嬉皮笑脸的吧（狗头保命）</p>
 <p>业务都是我旁边的xiayan在带，人美心善就是她了，感觉还没我年龄大。<br>业务上关键是我啥也不会，问的我都不好意思再问了。。。这里要吐槽一下，字节这内部平台也太多了，而且感觉全是在市面上的工具的改版，功能上可能差不多，但是用法上可能会有很大差距</p>
 <p>这边一般九点下班（2022.8.3半夜前来更新，还没下班。。。麻了），太难了，抛出房租、生活费，希望我的实习期间能剩下个学费的钱。。。</p>
-<p><a href="https://cdn.jsdelivr.net/gh/raptor1998/imghouse/byte/202208142254091.png" data-fancybox="group" data-caption="" class="fancybox"><img alt="" title="" data-src="https://cdn.jsdelivr.net/gh/raptor1998/imghouse/byte/202208142254091.png" src="https://cdn.jsdelivr.net/gh/raptor1998/imghouse/raptor1998_img/loading.gif" class="lazyload"></a></p>
+<p><a href="https://cdn.jsdelivr.net/gh/raptor1998/imghouse/raptor1998_img/loading.gif" data-fancybox="group" data-caption="" class="fancybox"><img alt="" data-src="https://cdn.jsdelivr.net/gh/raptor1998/imghouse/byte/202208142254091.png" src="https://cdn.jsdelivr.net/gh/raptor1998/imghouse/raptor1998_img/loading.gif" class="lazyload" title=""></a></p>
 <p>希望能在实习过程中，接触更多技术相关的东西，像樱木一样，从初学者到”灌篮高手“在短短几个月完成蜕变</p>
-<p><a href="https://cdn.jsdelivr.net/gh/raptor1998/imghouse/byte/202208142253172.jpg" data-fancybox="group" data-caption="" class="fancybox"><img alt="" title="" data-src="https://cdn.jsdelivr.net/gh/raptor1998/imghouse/byte/202208142253172.jpg" src="https://cdn.jsdelivr.net/gh/raptor1998/imghouse/raptor1998_img/loading.gif" class="lazyload"></a></p>
+<p><a href="https://cdn.jsdelivr.net/gh/raptor1998/imghouse/raptor1998_img/loading.gif" data-fancybox="group" data-caption="" class="fancybox"><img alt="" data-src="https://cdn.jsdelivr.net/gh/raptor1998/imghouse/byte/202208142253172.jpg" src="https://cdn.jsdelivr.net/gh/raptor1998/imghouse/raptor1998_img/loading.gif" class="lazyload" title=""></a></p>
 </body></html>]]></content>
       <categories>
         <category>实习</category>
