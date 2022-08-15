@@ -7834,4 +7834,39 @@ WHERE</code></pre><p>过滤。</p>
         <tag>实习技术帖</tag>
       </tags>
   </entry>
+  <entry>
+    <title>ByteStudy ipv4到ipv6改造</title>
+    <url>/2022/08/16/ByteStudy%20ipv4%E5%88%B0ipv6%E6%94%B9%E9%80%A0/</url>
+    <content><![CDATA[<html><head><link rel="stylesheet" class="aplayer-secondary-style-marker" href="/assets/css/APlayer.min.css"><script src="/assets/js/APlayer.min.js" class="aplayer-secondary-script-marker"></script><script class="meting-secondary-script-marker" src="/assets/js/Meting.min.js"></script></head><body><h1 id="IPv6的3种表示方法"><a href="#IPv6的3种表示方法" class="headerlink" title="IPv6的3种表示方法"></a>IPv6的3种表示方法</h1><ol>
+<li>冒分十六进制表示法</li>
+</ol>
+<p>　　格式为X:X:X:X:X:X:X:X，其中每个X表示地址中的16b，以十六进制表示，例如：</p>
+<div class="code-area-wrap"><div class="highlight-tools"><i class="fa fa-angle-down code-expand" aria-hidden="true"></i><div class="code_lang">Code</div><div class="copy-notice"></div><i class="fa fa-clipboard" aria-hidden="true"></i></div><figure class="highlight plain"><table><tbody><tr><td class="code"><pre><span class="line">　　ABCD:EF01:2345:6789:ABCD:EF01:2345:6789</span><br></pre></td></tr></tbody></table></figure></div>
+<p>　　这种表示法中，每个X的前导0是可以省略的，例如：</p>
+<div class="code-area-wrap"><div class="highlight-tools"><i class="fa fa-angle-down code-expand" aria-hidden="true"></i><div class="code_lang">Code</div><div class="copy-notice"></div><i class="fa fa-clipboard" aria-hidden="true"></i></div><figure class="highlight plain"><table><tbody><tr><td class="code"><pre><span class="line">　　2001:0DB8:0000:0023:0008:0800:200C:417A→ 2001:DB8:0:23:8:800:200C:417A</span><br></pre></td></tr></tbody></table></figure></div>
+<ol start="2">
+<li><p>0位压缩表示法<br> 在某些情况下，一个IPv6地址中间可能包含很长的一段0，可以把连续的一段0压缩为“::”。但为保证地址解析的唯一性，地址中”::”只能出现一次，例如：</p>
+<div class="code-area-wrap"><div class="highlight-tools"><i class="fa fa-angle-down code-expand" aria-hidden="true"></i><div class="code_lang">Code</div><div class="copy-notice"></div><i class="fa fa-clipboard" aria-hidden="true"></i></div><figure class="highlight plain"><table><tbody><tr><td class="code"><pre><span class="line">　　FF01:0:0:0:0:0:0:1101 → FF01::1101</span><br><span class="line">　　0:0:0:0:0:0:0:1 → ::1</span><br><span class="line">　　0:0:0:0:0:0:0:0 → ::</span><br></pre></td></tr></tbody></table></figure></div></li>
+<li><p>内嵌IPv4地址表示法</p>
+<p> 为了实现IPv4-IPv6互通，IPv4地址会嵌入IPv6地址中，此时地址常表示为：X:X:X:X:X:X:d.d.d.d，前96b采用冒分十六进制表示，而最后32b地址则使用IPv4的点分十进制表示，例如::192.168.0.1与::FFFF:192.168.0.1就是两个典型的例子，注意在前96b中，压缩0位的方法依旧适用 。</p>
+</li>
+</ol>
+<h1 id="过度技术"><a href="#过度技术" class="headerlink" title="过度技术"></a>过度技术</h1><h2 id="双栈技术"><a href="#双栈技术" class="headerlink" title="双栈技术"></a>双栈技术</h2><p>主机或路由器同时装有IPV4 和 IPV6两个协议栈，因此，主机既能和IPV4通信，也能和IPv6网络通信。</p>
+<p>IPv6和IPv4是功能相近的网络层协议，两者都基于相同的物理平台，而且加载于其上的传输层协议TCP和UDP又没有任何区别。如果一台主机同时支持IPv6和IPv4两种协议，那么该主机既能与支持IPv4协议的主机通信，又能与支持IPv6协议的主机通信，这就是双协议栈技术的工作机理。</p>
+<h2 id="隧道技术"><a href="#隧道技术" class="headerlink" title="隧道技术"></a>隧道技术</h2><p>在IPV6分组进入IPV4网络时，将IPV6分组封装成IPV4分组；当封装成IPV4分组离开IPV4网络时，再装数据部分（IPV6部分）转发给目的节点。</p>
+<p>利用隧道技术可以通过现有的运行IPv4协议的Internet骨干网络（即隧道）将局部的IPv6网络连接起来，因而是IPv4向IPv6过渡的初期最易于采用的技术。路由器将IPv6的数据分组封装入IPv4，IPv4分组的源地址和目的地址分别是隧道入口和出口的IPv4地址。在隧道的出口处，再将IPv6分组取出转发给目的站点。</p>
+<h2 id="协议翻译技术"><a href="#协议翻译技术" class="headerlink" title="协议翻译技术"></a>协议翻译技术</h2><p>对IPV6和IPV4报头时行相互翻译，实现IPV4/IPV6协议和地址的转换。</p>
+<p>网络地址转换/协议转换技术 NAT-PT 通过与SIIT协议转换和传统的IPv4下的动态地址翻译（NAT）以及适当的应用层网关（ALG）相结合，实现了只安装了IPv6的主机和只安装了IPv4机器的大部分应用的相互通信。</p>
+<h1 id="Reference"><a href="#Reference" class="headerlink" title="Reference"></a>Reference</h1><p><a href="http://www.mfisp.com/6796.html" target="_blank" rel="noopener">详细对比IPv4与IPv6的区别 - 梦飞科技</a></p>
+<p><a href="https://www.docin.com/p-2600732241.html" target="_blank" rel="noopener">浅析ＩＰｖ４到ＩＰｖ６的过渡技术（论文范文）</a></p>
+<p><a href="https://blog.csdn.net/weixin_40228200/article/details/118737890" target="_blank" rel="noopener">IPv6-IPv4过渡技术详解及配置实例_永远是少年啊的博客-CSDN博客_ipv6toipv4</a></p>
+<p><a href="https://blog.csdn.net/AIwenIPgeolocation/article/details/122925047" target="_blank" rel="noopener">从IPv4 到 IPv6 的过渡技术_AIwenIPgeolocation的博客-CSDN博客_ipv4到ipv6的过渡技术</a></p>
+</body></html>]]></content>
+      <categories>
+        <category>实习技术帖</category>
+      </categories>
+      <tags>
+        <tag>实习技术帖</tag>
+      </tags>
+  </entry>
 </search>
