@@ -7768,22 +7768,22 @@ WHERE</code></pre><p>过滤。</p>
 <li>从节点的I/O进程接收到主节点发送过来的日志内容、日志文件及位置点后，将接收到的日志内容更新到本机的relay-log（中继日志）的文件（Mysql-relay-bin.xxx）的最末端，并将读取到的binary log（bin-log）文件名和位置保存到master-info 文件中，以便在下一次读取的时候能够清楚的告诉Master“我需要从某个bin-log 的哪个位置开始往后的日志内容，请发给我”；</li>
 <li>Slave 的 SQL线程检测到relay-log 中新增加了内容后，会将relay-log的内容解析成在主节点上实际执行过SQL语句，然后在本数据库中按照解析出来的顺序执行，并在relay-log.info中记录当前应用中继日志的文件名和位置点。</li>
 </ol>
-<h2 id="Canal会不会丢失数据"><a href="#Canal会不会丢失数据" class="headerlink" title="Canal会不会丢失数据"></a>Canal会不会丢失数据</h2><ol>
+<h1 id="Canal会不会丢失数据"><a href="#Canal会不会丢失数据" class="headerlink" title="Canal会不会丢失数据"></a>Canal会不会丢失数据</h1><ol>
 <li>ZK的数据可靠性或者安全性被破坏，比如ZK数据丢失，ZK的数据被人为串改，特别是有关Position的值。</li>
 <li>MySQL binlog非正常运维，比如binglog迁移、重命名、丢失等。</li>
 <li>切换MySQL源，比如原来基于M1实例，后来M1因为某种原因失效，那么Canal将数据源切换为M2，而且M1和M2可能binlog数据存在不一致（非常有可能）。</li>
 <li>Consumer端ACK的时机不佳，比如调用get()方法，而不是getWithoutAck()，那么消息有可能尚未完全消费，就已经ACK，那么此时由异常或者Consumer实例失效，则可能导致消息丢失。我们需要在ACK时机上保障“at lease once”。</li>
 </ol>
-<h2 id="Canal会导致消息重复吗"><a href="#Canal会导致消息重复吗" class="headerlink" title="Canal会导致消息重复吗"></a>Canal会导致消息重复吗</h2><ol>
+<h1 id="Canal会导致消息重复吗"><a href="#Canal会导致消息重复吗" class="headerlink" title="Canal会导致消息重复吗"></a>Canal会导致消息重复吗</h1><ol>
 <li>Canal 实例初始化时，根据“消费者的Cursor”来确定binlog的起始位置，但是Cursor在ZK中的保存是滞后的（间歇性刷新），所以Canal 实例获得的起始位置一定不会大于消费者真实已见的位置。</li>
 <li>客户端，因为某种原因的rollback，也可能导致一个batch内的所有消息重发，此时可能导致重复消费。</li>
 </ol>
 <p>我们建议，Consumer端需要保持幂等，对于重复数据可以进行校验或者replace。对于非幂等操作，比如累加、计费，需要慎重。</p>
-<h2 id="Canal数据的集散问题，一个目的地的消息能否被多个客户端集群并行消费？"><a href="#Canal数据的集散问题，一个目的地的消息能否被多个客户端集群并行消费？" class="headerlink" title="Canal数据的集散问题，一个目的地的消息能否被多个客户端集群并行消费？"></a>Canal数据的集散问题，一个目的地的消息能否被多个客户端集群并行消费？</h2><p>比如有两个客户端集群，C1/C2，你希望C1和C2中的消费者都能够订阅到相同的消息，就像Kafka或者JMS Topic一样…但是非常遗憾，似乎Canal无法做到，这取决于Canal内部的存储模式，Canal内部是一个“即发即失”的内存队列，无法权衡、追溯不同客户端之间的消息，所以无法支持。</p>
+<h1 id="Canal数据的集散问题，一个目的地的消息能否被多个客户端集群并行消费？"><a href="#Canal数据的集散问题，一个目的地的消息能否被多个客户端集群并行消费？" class="headerlink" title="Canal数据的集散问题，一个目的地的消息能否被多个客户端集群并行消费？"></a>Canal数据的集散问题，一个目的地的消息能否被多个客户端集群并行消费？</h1><p>比如有两个客户端集群，C1/C2，你希望C1和C2中的消费者都能够订阅到相同的消息，就像Kafka或者JMS Topic一样…但是非常遗憾，似乎Canal无法做到，这取决于Canal内部的存储模式，Canal内部是一个“即发即失”的内存队列，无法权衡、追溯不同客户端之间的消息，所以无法支持。</p>
 <p>如果希望达到这种结果，有2个办法：第一，消费者收到消息以后转发到kafka或者MQ中，后继的其他客户端只与kafka或者MQ接入；第二：一个Canal中使用多个目的地，但是它们对应相同的MySQL源。</p>
-<h2 id="Canal数据的集散问题，一个目的地的消息能否被多个客户端集群并行消费？-1"><a href="#Canal数据的集散问题，一个目的地的消息能否被多个客户端集群并行消费？-1" class="headerlink" title="Canal数据的集散问题，一个目的地的消息能否被多个客户端集群并行消费？"></a>Canal数据的集散问题，一个目的地的消息能否被多个客户端集群并行消费？</h2><p>比如有两个客户端集群，C1/C2，你希望C1和C2中的消费者都能够订阅到相同的消息，就像Kafka或者JMS Topic一样…但是非常遗憾，似乎Canal无法做到，这取决于Canal内部的存储模式，Canal内部是一个“即发即失”的内存队列，无法权衡、追溯不同客户端之间的消息，所以无法支持。</p>
+<h1 id="Canal数据的集散问题，一个目的地的消息能否被多个客户端集群并行消费？-1"><a href="#Canal数据的集散问题，一个目的地的消息能否被多个客户端集群并行消费？-1" class="headerlink" title="Canal数据的集散问题，一个目的地的消息能否被多个客户端集群并行消费？"></a>Canal数据的集散问题，一个目的地的消息能否被多个客户端集群并行消费？</h1><p>比如有两个客户端集群，C1/C2，你希望C1和C2中的消费者都能够订阅到相同的消息，就像Kafka或者JMS Topic一样…但是非常遗憾，似乎Canal无法做到，这取决于Canal内部的存储模式，Canal内部是一个“即发即失”的内存队列，无法权衡、追溯不同客户端之间的消息，所以无法支持。</p>
 <p>如果希望达到这种结果，有2个办法：第一，消费者收到消息以后转发到kafka或者MQ中，后继的其他客户端只与kafka或者MQ接入；第二：一个Canal中使用多个目的地，但是它们对应相同的MySQL源。</p>
-<h2 id="Canal性能如何？"><a href="#Canal性能如何？" class="headerlink" title="Canal性能如何？"></a>Canal性能如何？</h2><p>Canal本身非常轻量级，主要性能开支就是在binlog解析，其转发、存储、提供消费者服务等都很简单。它本身不负责数据存储。原则上，canal解析效率几乎没有负载，canal的本身的延迟，取决于其与slave之间的网络IO。<br>如果Canal更换上游的主库或者从库，该怎么办？（比如迁库、迁表等）<br>背景要求，我们建议“新的数据库最好是旧的数据库的slave”或者“新、旧数据库为同源master”，平滑迁移；</p>
+<h1 id="Canal性能如何？"><a href="#Canal性能如何？" class="headerlink" title="Canal性能如何？"></a>Canal性能如何？</h1><p>Canal本身非常轻量级，主要性能开支就是在binlog解析，其转发、存储、提供消费者服务等都很简单。它本身不负责数据存储。原则上，canal解析效率几乎没有负载，canal的本身的延迟，取决于其与slave之间的网络IO。<br>如果Canal更换上游的主库或者从库，该怎么办？（比如迁库、迁表等）<br>背景要求，我们建议“新的数据库最好是旧的数据库的slave”或者“新、旧数据库为同源master”，平滑迁移；</p>
 <pre><code>1）创建一个新的实例，使用新的目的地，并与新的Slave创建连接。
 
 2）在此期间，Consumer仍然与旧的目的地消费。
@@ -8167,7 +8167,7 @@ WHERE</code></pre><p>过滤。</p>
       </tags>
   </entry>
   <entry>
-    <title>多线程常见题目</title>
+    <title>多线程</title>
     <url>/2022/08/18/%E5%A4%9A%E7%BA%BF%E7%A8%8B%E5%B8%B8%E8%A7%81%E9%A2%98%E7%9B%AE/</url>
     <content><![CDATA[<html><head><link rel="stylesheet" class="aplayer-secondary-style-marker" href="/assets/css/APlayer.min.css"><script src="/assets/js/APlayer.min.js" class="aplayer-secondary-script-marker"></script><script class="meting-secondary-script-marker" src="/assets/js/Meting.min.js"></script></head><body><h1 id="Volatile关键字"><a href="#Volatile关键字" class="headerlink" title="Volatile关键字"></a>Volatile关键字</h1><h2 id="三大特性"><a href="#三大特性" class="headerlink" title="三大特性"></a>三大特性</h2><p>Volatile是Java虚拟机提供的轻量级的同步机制（三大特性）</p>
 <ul>
@@ -8182,7 +8182,7 @@ WHERE</code></pre><p>过滤。</p>
 <li>加锁和解锁是同一把锁</li>
 </ul>
 <p>由于JVM运行程序的实体是线程，而每个线程创建时JVM都会为其创建一个工作内存（有些地方称为栈空间），工作内存是每个线程的私有数据区域，而Java内存模型中规定所有变量都存储在主内存，主内存是共享内存区域，所有线程都可以访问，但线程对变量的操作（读取赋值等）必须在工作内存中进行，首先要将变量从主内存拷贝到自己的工作内存空间，然后对变量进行操作，操作完成后再将变量写会主内存，不能直接操作主内存中的变量，各个线程中的工作内存中存储着主内存中的变量副本拷贝，因此不同的线程间无法访问对方的工作内存，线程间的通信（传值）必须通过主内存来完成，其简要访问过程：</p>
-<p><a href="https://cdn.jsdelivr.net/gh/raptor1998/imghouse/byte/202208172139279.png" data-fancybox="group" data-caption="" class="fancybox"><img alt="" title="" data-src="https://cdn.jsdelivr.net/gh/raptor1998/imghouse/byte/202208172139279.png" src="https://cdn.jsdelivr.net/gh/raptor1998/imghouse/raptor1998_img/loading.gif" class="lazyload"></a></p>
+<p><a href="https://cdn.jsdelivr.net/gh/raptor1998/imghouse/raptor1998_img/loading.gif" data-fancybox="group" data-caption="" class="fancybox"><img alt="" data-src="https://cdn.jsdelivr.net/gh/raptor1998/imghouse/byte/202208172139279.png" src="https://cdn.jsdelivr.net/gh/raptor1998/imghouse/raptor1998_img/loading.gif" class="lazyload" title=""></a></p>
 <h2 id="保证可见性"><a href="#保证可见性" class="headerlink" title="保证可见性"></a>保证可见性</h2><div class="code-area-wrap"><div class="highlight-tools"><i class="fa fa-angle-down code-expand" aria-hidden="true"></i><div class="code_lang">java</div><div class="copy-notice"></div><i class="fa fa-clipboard" aria-hidden="true"></i></div><figure class="highlight java"><table><tbody><tr><td class="code"><pre><span class="line"></span><br><span class="line"><span class="keyword">import</span> java.util.concurrent.TimeUnit;</span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 假设是主物理内存</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">MyData</span> </span>{</span><br><span class="line"></span><br><span class="line">    <span class="keyword">volatile</span> <span class="keyword">int</span> number = <span class="number">0</span>;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">addTo60</span><span class="params">()</span> </span>{</span><br><span class="line">        <span class="keyword">this</span>.number = <span class="number">60</span>;</span><br><span class="line">    }</span><br><span class="line">}</span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 验证volatile的可见性</span></span><br><span class="line"><span class="comment"> * 1. 假设int number = 0， number变量之前没有添加volatile关键字修饰</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">VolatileDemo</span> </span>{</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String args [])</span> </span>{</span><br><span class="line"></span><br><span class="line">        <span class="comment">// 资源类</span></span><br><span class="line">        MyData myData = <span class="keyword">new</span> MyData();</span><br><span class="line"></span><br><span class="line">        <span class="comment">// AAA线程 实现了Runnable接口的，lambda表达式</span></span><br><span class="line">        <span class="keyword">new</span> Thread(() -&gt; {</span><br><span class="line"></span><br><span class="line">            System.out.println(Thread.currentThread().getName() + <span class="string">"\t come in"</span>);</span><br><span class="line"></span><br><span class="line">            <span class="comment">// 线程睡眠3秒，假设在进行运算</span></span><br><span class="line">            <span class="keyword">try</span> {</span><br><span class="line">                TimeUnit.SECONDS.sleep(<span class="number">3</span>);</span><br><span class="line">            } <span class="keyword">catch</span> (Exception e) {</span><br><span class="line">                e.printStackTrace();</span><br><span class="line">            }</span><br><span class="line">            <span class="comment">// 修改number的值</span></span><br><span class="line">            myData.addTo60();</span><br><span class="line"></span><br><span class="line">            <span class="comment">// 输出修改后的值</span></span><br><span class="line">            System.out.println(Thread.currentThread().getName() + <span class="string">"\t update number value:"</span> + myData.number);</span><br><span class="line"></span><br><span class="line">        }, <span class="string">"AAA"</span>).start();</span><br><span class="line"></span><br><span class="line">        <span class="keyword">while</span>(myData.number == <span class="number">0</span>) {</span><br><span class="line">            <span class="comment">// main线程就一直在这里等待循环，直到number的值不等于零</span></span><br><span class="line">        }</span><br><span class="line"></span><br><span class="line">        <span class="comment">// 按道理这个值是不可能打印出来的，因为主线程运行的时候，number的值为0，所以一直在循环</span></span><br><span class="line">        <span class="comment">// 如果能输出这句话，说明AAA线程在睡眠3秒后，更新的number的值，重新写入到主内存，并被main线程感知到了</span></span><br><span class="line">        System.out.println(Thread.currentThread().getName() + <span class="string">"\t mission is over"</span>);</span><br><span class="line"></span><br><span class="line">        <span class="comment">/**</span></span><br><span class="line"><span class="comment">         * 最后输出结果：</span></span><br><span class="line"><span class="comment">         * AAA	 come in</span></span><br><span class="line"><span class="comment">         * AAA	 update number value:60</span></span><br><span class="line"><span class="comment">         * 最后线程没有停止，并行没有输出  mission is over 这句话，说明没有用volatile修饰的变量，是没有可见性</span></span><br><span class="line"><span class="comment">         */</span></span><br><span class="line"></span><br><span class="line">    }</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure></div>
 
 <h2 id="不保证原子性"><a href="#不保证原子性" class="headerlink" title="不保证原子性"></a>不保证原子性</h2><div class="code-area-wrap"><div class="highlight-tools"><i class="fa fa-angle-down code-expand" aria-hidden="true"></i><div class="code_lang">java</div><div class="copy-notice"></div><i class="fa fa-clipboard" aria-hidden="true"></i></div><figure class="highlight java"><table><tbody><tr><td class="code"><pre><span class="line"><span class="comment">// 创建10个线程，线程里面进行1000次循环</span></span><br><span class="line"><span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; <span class="number">20</span>; i++) {</span><br><span class="line">    <span class="keyword">new</span> Thread(() -&gt; {</span><br><span class="line">        <span class="comment">// 里面</span></span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> j = <span class="number">0</span>; j &lt; <span class="number">10000</span>; j++) {</span><br><span class="line">            myData.addPlusPlus();</span><br><span class="line">        }</span><br><span class="line">    }, String.valueOf(i)).start();</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure></div>
@@ -8313,7 +8313,7 @@ WHERE</code></pre><p>过滤。</p>
 <p> 使用ThreadLocal会存在内存泄漏问题。</p>
 <p> 使用ThreadLocal对象作为键存储，是弱引用的，可以被回收掉，键为null，但是value值是强引用，不能被回收。</p>
 <p> 建议：在使用完后，主动调用remove()，删除</p>
-<p><a href="https://cdn.jsdelivr.net/gh/raptor1998/imghouse/byte/202208191813112.png" data-fancybox="group" data-caption="" class="fancybox"><img alt="" title="" data-src="https://cdn.jsdelivr.net/gh/raptor1998/imghouse/byte/202208191813112.png" src="https://cdn.jsdelivr.net/gh/raptor1998/imghouse/raptor1998_img/loading.gif" class="lazyload"></a></p>
+<p><a href="https://cdn.jsdelivr.net/gh/raptor1998/imghouse/raptor1998_img/loading.gif" data-fancybox="group" data-caption="" class="fancybox"><img alt="" data-src="https://cdn.jsdelivr.net/gh/raptor1998/imghouse/byte/202208191813112.png" src="https://cdn.jsdelivr.net/gh/raptor1998/imghouse/raptor1998_img/loading.gif" class="lazyload" title=""></a></p>
 <p><code>Thread</code>类有一个类型为<code>ThreadLocal.ThreadLocalMap</code>的实例变量<code>threadLocals</code>，也就是说每个线程有一个自己的<code>ThreadLocalMap</code>。</p>
 <p><code>ThreadLocalMap</code>有自己的独立实现，可以简单地将它的<code>key</code>视作<code>ThreadLocal</code>，<code>value</code>为代码中放入的值（实际上<code>key</code>并不是<code>ThreadLocal</code>本身，而是它的一个<strong>弱引用</strong>）。</p>
 <p>每个线程在往<code>ThreadLocal</code>里放值的时候，都会往自己的<code>ThreadLocalMap</code>里存，读也是以<code>ThreadLocal</code>作为引用，在自己的<code>map</code>里找对应的<code>key</code>，从而实现了<strong>线程隔离</strong>。</p>
@@ -8445,6 +8445,18 @@ WHERE</code></pre><p>过滤。</p>
       <tags>
         <tag>Java</tag>
         <tag>面试总结</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>mysql日志</title>
+    <url>/2022/08/23/mysql-%E6%97%A5%E5%BF%97/</url>
+    <content><![CDATA[<html><head><link rel="stylesheet" class="aplayer-secondary-style-marker" href="/assets/css/APlayer.min.css"><script src="/assets/js/APlayer.min.js" class="aplayer-secondary-script-marker"></script><script class="meting-secondary-script-marker" src="/assets/js/Meting.min.js"></script></head><body></body></html>]]></content>
+      <categories>
+        <category>面试总结</category>
+      </categories>
+      <tags>
+        <tag>面试总结</tag>
+        <tag>MySQL</tag>
       </tags>
   </entry>
 </search>
