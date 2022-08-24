@@ -8459,4 +8459,197 @@ WHERE</code></pre><p>过滤。</p>
         <tag>MySQL</tag>
       </tags>
   </entry>
+  <entry>
+    <title>项目相关的问题</title>
+    <url>/2022/08/23/%E9%A1%B9%E7%9B%AE%E7%9B%B8%E5%85%B3%E9%97%AE%E9%A2%98(1)/</url>
+    <content><![CDATA[<html><head><link rel="stylesheet" class="aplayer-secondary-style-marker" href="/assets/css/APlayer.min.css"><script src="/assets/js/APlayer.min.js" class="aplayer-secondary-script-marker"></script><script class="meting-secondary-script-marker" src="/assets/js/Meting.min.js"></script></head><body><h3 id="创建bean"><a href="#创建bean" class="headerlink" title="创建bean"></a>创建bean</h3><ol>
+<li>实例化Bean：通过反射调用构造方法实例化对象。</li>
+<li>依赖注入：装配Bean的属性</li>
+<li>实现了Aware接口的Bean，执行接口方法：如顺序执行BeanNameAware、BeanFactoryAware、 ApplicationContextAware的接口方法。</li>
+<li>Bean对象初始化前，循环调用实现了BeanPostProcessor接口的预初始化方法 （postProcessBeforeInitialization）</li>
+<li>Bean对象初始化：顺序执行@PostConstruct注解方法、InitializingBean接口方法、init-method方法</li>
+<li>Bean对象初始化后，循环调用实现了BeanPostProcessor接口的后初始化方法 （postProcessAfterInitialization）</li>
+<li>容器关闭时，执行Bean对象的销毁方法，顺序是：@PreDestroy注解方法、DisposableBean接口方法、destroy-method</li>
+</ol>
+<h3 id="循环依赖问题"><a href="#循环依赖问题" class="headerlink" title="循环依赖问题"></a>循环依赖问题</h3><p>实例化 A，此时 A 还未完成属性填充和初始化方法（@PostConstruct）的执行，A 只是一个半成品。<br>为 A 创建一个 Bean工厂，并放入到 singletonFactories 中。<br>发现 A 需要注入 B 对象，但是一级、二级、三级缓存均为发现对象 B。<br>实例化 B，此时 B 还未完成属性填充和初始化方法（@PostConstruct）的执行，B 只是一个半成品。<br>为 B 创建一个 Bean工厂，并放入到 singletonFactories 中。<br>发现 B 需要注入 A 对象，此时在一级、二级未发现对象<br>A，但是在三级缓存中发现了对象 A，从三级缓存中得到对象 A，并将对象 A 放入二级缓存中，同时删除三级缓存中的对象 A。（注意，此时的 A<br>还是一个半成品，并没有完成属性填充和执行初始化方法）<br>将对象 A 注入到对象 B 中。<br>对象 B 完成属性填充，执行初始化方法，并放入到一级缓存中，同时删除二级缓存中的对象 B。（此时对象 B 已经是一个成品）<br>对象 A 得到对象B，将对象 B 注入到对象 A 中。（对象 A 得到的是一个完整的对象 B）<br>对象 A完成属性填充，执行初始化方法，并放入到一级缓存中，同时删除二级缓存中的对象 A。</p>
+<h3 id="sync锁升级"><a href="#sync锁升级" class="headerlink" title="sync锁升级"></a>sync锁升级</h3><p>初次执行到synchronized代码块的时候，锁对象变成<strong>偏向锁</strong>（通过CAS修改对象头里的锁标志位），字面意思是“偏向于第一个获得它的线程”的锁。执行完同步代码块后，线程并<strong>不会主动释放偏向锁</strong>。当第二次到达同步代码块时，线程会判断此时持有锁的线程是否就是自己（持有锁的线程ID也在对象头里），如果是则正常往下执行。<strong>由于之前没有释放锁，这里也就不需要重新加锁。</strong>如果自始至终使用锁的线程只有一个，很明显偏向锁几乎没有额外开销，性能极高。</p>
+<p>一旦有第二个线程加入<strong>锁竞争</strong>，偏向锁就升级为<strong>轻量级锁（自旋锁）</strong>。这里要明确一下什么是锁竞争：如果多个线程轮流获取一个锁，但是每次获取锁的时候都很顺利，没有发生阻塞，那么就不存在锁竞争。只有当某线程尝试获取锁的时候，发现该锁已经被占用，只能等待其释放，这才发生了锁竞争。</p>
+<p>在轻量级锁状态下继续锁竞争，没有抢到锁的线程将<strong>自旋</strong>，即不停地循环判断锁是否能够被成功获取。获取锁的操作，其实就是通过CAS修改对象头里的锁标志位。先<strong>比较</strong>当前锁标志位是否为“释放”，如果是则将其<strong>设置</strong>为“锁定”，比较并设置是<strong>原子性</strong>发生的。这就算抢到锁了，然后线程将当前锁的持有者信息修改为自己。</p>
+<p>长时间的自旋操作是非常消耗资源的，一个线程持有锁，其他线程就只能在原地空耗CPU，执行不了任何有效的任务，这种现象叫做<strong>忙等（busy-waiting）</strong>。如果多个线程用一个锁，但是没有发生锁竞争，或者发生了很轻微的锁竞争，那么synchronized就用轻量级锁，允许短时间的忙等现象。这是一种折衷的想法，<strong>短时间的忙等，换取线程在用户态和内核态之间切换的开销。</strong></p>
+<p>显然，此忙等是有限度的（有个计数器记录自旋次数，默认允许循环10次，可以通过虚拟机参数更改）。如果锁竞争情况严重，某个达到最大自旋次数的线程，会将轻量级锁升级为<strong>重量级锁</strong>（依然是CAS修改锁标志位，但不修改持有锁的线程ID）。当后续线程尝试获取锁时，发现被占用的锁是重量级锁，则直接将自己挂起（而不是忙等），等待将来被唤醒。在JDK1.6之前，synchronized直接加重量级锁，很明显现在得到了很好的优化。</p>
+<p>一个锁只能按照 偏向锁、轻量级锁、重量级锁的顺序逐渐升级（也有叫<strong>锁膨胀</strong>的），不允许降级。</p>
+<h3 id="测试相关"><a href="#测试相关" class="headerlink" title="测试相关"></a>测试相关</h3><p>Web测试主要从下面几个大方向考虑</p>
+<p>功能测试，主要做链接测试，表单测试，cookies测试，设计语言测试等</p>
+<p>性能测试，考虑连接速度测试，以及负载测试，例如：Web应用系统能允许多少个用户同时在线？如果超过了这个数量，会出现什么现象？Web应用系统能否处理大量用户对同一个页面的请求？还有压力测试</p>
+<p>可用性测试，比如导航测试，图形测试，内容测试，整体界面测试等</p>
+<p>兼容性测试，市场上有很多不同的操作系统类型，最常见的有Windows、Unix、Macintosh、Linux等。Web应用系统的最终用户究竟使用哪一种操作系统，取决于用户系统的配置。这样，就可能会发生兼容性问题，同一个应用可能在某些操作系统下能正常运行，但在另外的操作系统下可能会运行失败。因此，在Web系统发布之前，需要在各种操作系统下对Web系统进行兼容性测试。</p>
+<p>安全性测试，</p>
+<p>（1）现在的Web应用系统基本采用先注册，后登陆的方式。因此，必须测试有效和无效的用户名和密码，要注意到是否大小写敏感，可以试多少次的限制，是否可以不登陆而直接浏览某个页面等。</p>
+<p>（2）Web应用系统是否有超时的限制，也就是说，用户登陆后在一定时间内（例如15分钟）没有点击任何页面，是否需要重新登陆才能正常使用。</p>
+<p>（3）为了保证Web应用系统的安全性，日志文件是至关重要的。需要测试相关信息是否写进了日志文件、是否可追踪。</p>
+<p>（4）当使用了安全套接字时，还要测试加密是否正确，检查信息的完整性。</p>
+<p>（5）服务器端的脚本常常构成安全漏洞，这些漏洞又常常被黑客利用。所以，还要测试没有经过授权，就不能在服务器端放置和编辑脚本的问题。</p>
+<h3 id="临平"><a href="#临平" class="headerlink" title="临平"></a>临平</h3><h4 id="关于本地事务和mq的使用"><a href="#关于本地事务和mq的使用" class="headerlink" title="关于本地事务和mq的使用"></a>关于本地事务和mq的使用</h4><h5 id="方式一"><a href="#方式一" class="headerlink" title="方式一"></a>方式一</h5><ul>
+<li><p>step1：开启本地事务</p>
+</li>
+<li><p>step2：生成购物订单</p>
+</li>
+<li><p>step3：投递消息到mq</p>
+</li>
+<li><p>step4：提交本地事务</p>
+</li>
+</ul>
+<p>这种方式是将发送消息放在了事务提交之前。</p>
+<p><strong>可能存在的问题</strong></p>
+<p>step3发生异常：导致step4失败，商品下单失败，直接影响到商品下单业务</p>
+<p>step4发生异常，其他step成功：商品下单失败，消息投递成功，给用户增加了积分</p>
+<h5 id="方式二"><a href="#方式二" class="headerlink" title="方式二"></a>方式二</h5><p>下面我们换种方式，我们将发送消息放到事务之后进行。</p>
+<ul>
+<li>step1：开启本地事务</li>
+<li>step2：生成购物订单</li>
+<li>step3：提交本地事务</li>
+<li>step4：投递消息到mq</li>
+</ul>
+<p>step4发生异常，其他step成功：导致商品下单成功，投递消息失败，用户未增加积分</p>
+<p>上面两种是比较常见的做法，也是最容易出错的。</p>
+<h5 id="方式三"><a href="#方式三" class="headerlink" title="方式三"></a>方式三</h5><ul>
+<li>step1：开启本地事务</li>
+<li>step2：生成购物订单</li>
+<li>step3：本地库中插入一条需要发送消息的记录t_msg_record</li>
+<li>step3：提交本地事务</li>
+<li>step5：新增一个定时器，轮询t_msg_record，将待发送的记录投递到mq中</li>
+</ul>
+<p>这种方式借助了数据库的事务，业务和消息记录作为了一个原子操作，业务成功之后，消息日志必定是存在的。解决了前两种方式遇到的问题。如果我们的业务系统比较单一，可以采用这种方式。</p>
+<p>对于微服务化的情况，上面这种方式不是太好，每个服务都需要上面的操作；也不利于扩展。</p>
+<h5 id="方式四"><a href="#方式四" class="headerlink" title="方式四"></a>方式四</h5><p>增加一个消息服务及消息库，负责消息的落库、将消息发送投递到mq。</p>
+<ul>
+<li>step1：开启本地事务</li>
+<li>step2：生成购物订单</li>
+<li>step3：当前事务库插入一条日志：生成一个唯一的业务id（msg_order_id），将msg_order_id和订单关联起来保存到当前事务所在的库中</li>
+<li>step4：调用消息服务：携带msg_order_id，将消息先落地入库，此时消息的状态为待发送状态，返回消息id(msg_id)</li>
+<li>step5：提交本地事务</li>
+<li>step6：如果上面都成功，调用消息服务，将消息投递到mq中；如果上面有失败的情况，则调用消息服务取消消息的发送</li>
+</ul>
+<p>能想到上面这种方式，已经算是有很大进步了，我们继续分析一下可能存在的问题：</p>
+<p>系统中增加了一个消息服务，商品下单操作依赖于该服务，业务对该服务依赖性比较高，当消息服务不可用时，整个业务将不可用。</p>
+<p>若step6失败，消息将处于待发送状态，此时业务方需要提供一个回查接口（通过msg_order_id查询）,验证业务是否执行成功；消息服务需新增一个定时任务，对于状态为待发送状态的消息做补偿处理，检查一下业务是否处理成功；从而确定消息是投递还是取消发送</p>
+<p>step4依赖于消息服务，如果消息服务性能不佳，会导致当前业务的事务提交时间延长，容易产生死锁，并导致并发性能降低。我们通常是比较忌讳在事务中做远程调用处理的，远程调用的性能和时间往往不可控，会导致当前事务变为一个大事务，从而引发其他故障。</p>
+<h5 id="方式五"><a href="#方式五" class="headerlink" title="方式五"></a>方式五</h5><p>在以上方式中，我们继续改进，进而出现了更好的一种方式：</p>
+<ul>
+<li><p>step1：生成一个全局唯一业务消息id（bus_msg_id)，调用消息服务，携带bus_msg_id，将消息先落地入库，此时消息的状态为待发送状态，返回消息id（msg_id）</p>
+</li>
+<li><p>step2：开启本地事务</p>
+</li>
+<li><p>step3：生成购物订单</p>
+</li>
+<li><p>step4：当前事务库插入一条日志（将step3中的业务和bus_msg_id关联起来）</p>
+</li>
+<li><p>step5：提交本地事务</p>
+</li>
+<li><p>step6：分2种情况：如果上面都成功，调用消息服务，将消息投递到mq中；如果上面有失败的情况，则调用消息服务取消消息的发送</p>
+</li>
+</ul>
+<p>  若step6失败，消息将处于待发送状态，此时业务方需要提供一个回查接口（通过bus_msg_id查询）,验证业务是否执行成功；</p>
+<p>消息服务需新增一个定时任务，对于状态为待发送状态的消息做补偿处理，检查一下业务是否处理成功；从而确定消息是投递还是取消发送。</p>
+<p>方式五和方式四对比，比较好的一个地方：将调用消息服务，消息落地操作，放在了事务之外进行，这点小的改进其实算是一个非常好的优化，减少了本地事务的执行时间，从而可以提升并发量，阿里有个消息中间件RocketMQ就支持方式5这种，大家可以去用用。</p>
+<h4 id="另一种方案"><a href="#另一种方案" class="headerlink" title="另一种方案"></a>另一种方案</h4><p><a href="https://cdn.jsdelivr.net/gh/Raptor1998/imghouse/untidy/20220328111604.png" data-fancybox="group" data-caption="image-20220325140442199" class="fancybox"><img alt="image-20220325140442199" title="image-20220325140442199" data-src="https://cdn.jsdelivr.net/gh/Raptor1998/imghouse/untidy/20220328111604.png" src="https://cdn.jsdelivr.net/gh/raptor1998/imghouse/raptor1998_img/loading.gif" class="lazyload"></a></p>
+<h4 id="消息的可靠性"><a href="#消息的可靠性" class="headerlink" title="消息的可靠性"></a>消息的可靠性</h4><h5 id="消息丢失"><a href="#消息丢失" class="headerlink" title="消息丢失"></a>消息丢失</h5><ul>
+<li>消息发送出去，由于网络问题没有抵达服务器<ul>
+<li>做好容错方法(try-catch)，发送消息可能会网络失败，失败后要有重试机制，可记录到数据库，采用定期扫描重发的方式</li>
+<li>做好日志记录，每个消息状态是否都被服务器收到都应该记录</li>
+<li>做好定期重发，如果消息没有发送成功，定期去数据库扫描未成功的消息进行重发</li>
+</ul>
+</li>
+<li>消息抵达Broker，Broker要将消息写入磁盘(持久化)才算成功。此时Broker尚未持久化完成，宕机.<ul>
+<li>publisher也必须加入确认回调机制，确认成功的消息，修改数据库消息状态。</li>
+</ul>
+</li>
+<li>自动ACK的状态下。消费者收到消息，但没来得及消息然后宕机<ul>
+<li>一定开启手动ACK，消费成功才移除，失败或者没来得及处理就noAck并重新入队</li>
+</ul>
+</li>
+</ul>
+<h5 id="消息重复"><a href="#消息重复" class="headerlink" title="消息重复"></a>消息重复</h5><ul>
+<li>消息消费成功，事务已经提交，ack时，机器宕机。导致没有ack成功，Broker的消息重新由unack变为ready，并发送给其他消费者</li>
+<li>消息消费失败，由于重试机制，自动又将消息发送出去</li>
+<li>成功消费，ack时宕机，消息由unack变为ready，Broker又重新发送<ul>
+<li>消费者的业务消费接口应该设计为幂等性的。比如扣库存有工作单的状态标志</li>
+<li>使用防重表（redis/mysql)，发送消息每一个都有业务的唯一标识，处理过就不用处理</li>
+<li>rabbitMQ的每一个消息都有redelivered字段，可以获取是否是被重新投递过来的，而不是第一次投递过来的</li>
+</ul>
+</li>
+</ul>
+<h5 id="消息积压"><a href="#消息积压" class="headerlink" title="消息积压"></a>消息积压</h5><ul>
+<li>消费者宕机积压</li>
+<li>消费者消费能力不足宕机</li>
+<li>发送者发送流量太大<ul>
+<li>上线更多的消费者，进行正常消费</li>
+<li>上线专门的队列消费服务，将消息先批量的取出来，记录数据库，离线慢慢处理</li>
+</ul>
+</li>
+</ul>
+<h3 id="选课"><a href="#选课" class="headerlink" title="选课"></a>选课</h3><h4 id="关于redis的分布式锁"><a href="#关于redis的分布式锁" class="headerlink" title="关于redis的分布式锁"></a>关于redis的分布式锁</h4><div class="code-area-wrap"><div class="highlight-tools"><i class="fa fa-angle-down code-expand" aria-hidden="true"></i><div class="code_lang">Code</div><div class="copy-notice"></div><i class="fa fa-clipboard" aria-hidden="true"></i></div><figure class="highlight plain"><table><tbody><tr><td class="code"><pre><span class="line">synchronized (this)</span><br><span class="line">1. 在分布式环境下  多个jvm  进程级别锁</span><br><span class="line">Boolean result = stringRedisTemplate.opsForValue().setIfAbsent(lockKey, "lalal");</span><br><span class="line">stringRedisTemplate.expire(lockKey, 10, TimeUnit.SECONDS);</span><br><span class="line">stringRedisTemplate.delete(lockKey);</span><br><span class="line">1. 进程执行到  设置过期时间, 服务挂掉，则无法解锁</span><br><span class="line">2. 若A需要执行 15s, 代码未执行完成，锁过期，则后续请求B进入，加B锁，5s后，A执行到删除锁，删掉B加的锁</span><br><span class="line">    同理，C进来，上锁，B此时执行了5s，  套娃下去，总会出现，多个请求，同时在做库存相关操作</span><br><span class="line">String clientId = UUID.randomUUID().toString();</span><br><span class="line">if (clientId.equals(stringRedisTemplate.opsForValue().get(lockKey))) {</span><br><span class="line">        stringRedisTemplate.delete(lockKey);</span><br><span class="line">    }</span><br><span class="line">1. 引入进程识别，只能删除我自己加的锁</span><br><span class="line"></span><br><span class="line">在主线程处理业务逻辑时，开辟新的timer线程，强行为locakKey续命，最好设置为过期时间的1/3</span><br></pre></td></tr></tbody></table></figure></div>
+
+<p><a href="https://cdn.jsdelivr.net/gh/raptor1998/imghouse/byte/202208231618786.png" data-fancybox="group" data-caption="" class="fancybox"><img alt="" title="" data-src="https://cdn.jsdelivr.net/gh/raptor1998/imghouse/byte/202208231618786.png" src="https://cdn.jsdelivr.net/gh/raptor1998/imghouse/raptor1998_img/loading.gif" class="lazyload"></a></p>
+<h4 id="redis的事务"><a href="#redis的事务" class="headerlink" title="redis的事务"></a>redis的事务</h4><ul>
+<li>单独的隔离操作：事务中的所有命令都会序列化、按顺序地执行。事务在执行的过程中，不会被其他客户端发送来的命令请求所打断。</li>
+<li>没有隔离级别的概念：队列中的命令没有提交之前都不会实际的被执行，因为事务提交前任何指令都不会被实际执行， 也就不存在”事务内的查询要看到事务里的更新，在事务外查询不能看到”这个让人万分头痛的问题</li>
+<li>不保证原子性：redis同一个事务中如果有一条命令执行失败，其后的命令仍然会被执行，没有回滚</li>
+</ul>
+<h4 id="接口的幂等性问题及解决方案"><a href="#接口的幂等性问题及解决方案" class="headerlink" title="接口的幂等性问题及解决方案"></a>接口的幂等性问题及解决方案</h4><p><a href="https://cdn.jsdelivr.net/gh/Raptor1998/imghouse/untidy/20220328111613.png" data-fancybox="group" data-caption="image-20220323145312086" class="fancybox"><img alt="image-20220323145312086" title="image-20220323145312086" data-src="https://cdn.jsdelivr.net/gh/Raptor1998/imghouse/untidy/20220328111613.png" src="https://cdn.jsdelivr.net/gh/raptor1998/imghouse/raptor1998_img/loading.gif" class="lazyload"></a></p>
+<h4 id="binlog"><a href="#binlog" class="headerlink" title="binlog"></a>binlog</h4><p><a href="https://cdn.jsdelivr.net/gh/Raptor1998/imghouse/untidy/20220328111740.png" data-fancybox="group" data-caption="image-20220317103031072" class="fancybox"><img alt="image-20220317103031072" title="image-20220317103031072" data-src="https://cdn.jsdelivr.net/gh/Raptor1998/imghouse/untidy/20220328111740.png" src="https://cdn.jsdelivr.net/gh/raptor1998/imghouse/raptor1998_img/loading.gif" class="lazyload"></a></p>
+<h3 id="redis"><a href="#redis" class="headerlink" title="redis"></a>redis</h3><h4 id="跳表"><a href="#跳表" class="headerlink" title="跳表"></a>跳表</h4><h4 id="skiplist与平衡树、哈希表的比较"><a href="#skiplist与平衡树、哈希表的比较" class="headerlink" title="skiplist与平衡树、哈希表的比较"></a><a href="https://cdn.jsdelivr.net/gh/Raptor1998/imghouse/untidy/20220330223107.png" data-fancybox="group" data-caption="image-20220329111901643" class="fancybox"><img alt="image-20220329111901643" title="image-20220329111901643" data-src="https://cdn.jsdelivr.net/gh/Raptor1998/imghouse/untidy/20220330223107.png" src="https://cdn.jsdelivr.net/gh/raptor1998/imghouse/raptor1998_img/loading.gif" class="lazyload"></a>skiplist与平衡树、哈希表的比较</h4><p>skiplist和各种平衡树（如AVL、红黑树等）的元素是有序排列的，而哈希表不是有序的。因此，在哈希表上只能做单个key的查找，不适宜做范围查找。所谓范围查找，指的是查找那些大小在指定的两个值之间的所有节点。</p>
+<p>在做范围查找的时候，平衡树比skiplist操作要复杂。在平衡树上，我们找到指定范围的小值之后，还需要以中序遍历的顺序继续寻找其它不超过大值的节点。如果不对平衡树进行一定的改造，这里的中序遍历并不容易实现。而在skiplist上进行范围查找就非常简单，只需要在找到小值之后，对第1层链表进行若干步的遍历就可以实现。</p>
+<p>平衡树的插入和删除操作可能引发子树的调整，逻辑复杂，而skiplist的插入和删除只需要修改相邻节点的指针，操作简单又快速。</p>
+<p>从内存占用上来说，skiplist比平衡树更灵活一些。一般来说，平衡树每个节点包含2个指针（分别指向左右子树），而skiplist每个节点包含的指针数目平均为1/(1-p)，具体取决于参数p的大小。如果像Redis里的实现一样，取p=1/4，那么平均每个节点包含1.33个指针，比平衡树更有优势。</p>
+<p>查找单个key，skiplist和平衡树的时间复杂度都为O(log n)，大体相当；而哈希表在保持较低的哈希值冲突概率的前提下，查找时间复杂度接近O(1)，性能更高一些。所以我们平常使用的各种Map或dictionary结构，大都是基于哈希表实现的。</p>
+<p>从算法实现难度上来比较，skiplist比平衡树要简单得多。</p>
+<h3 id="线程池拒绝策略"><a href="#线程池拒绝策略" class="headerlink" title="线程池拒绝策略"></a>线程池拒绝策略</h3><p>中止策略：无特殊场景。<br>丢弃策略：无关紧要的任务（博客阅读量）。<br>弃老策略：发布消息。<br>调用者运行策略：不允许失败场景（对性能要求不高、并发量较小）。</p>
+<p>详细回答：</p>
+<ol>
+<li><p>AbortPolicy中止策略：丢弃任务并抛出RejectedExecutionException异常。</p>
+<p>这是线程池默认的拒绝策略，在任务不能再提交的时候，抛出异常，及时反馈程序运行状态。如果是比较关键的业务，推荐使用此拒绝策略，这样子在系统不能承载更大的并发量的时候，能够及时的通过异常发现。</p>
+<p>功能：当触发拒绝策略时，直接抛出拒绝执行的异常，中止策略的意思也就是打断当前执行流程.<br>使用场景：这个就没有特殊的场景了，但是有一点要正确处理抛出的异常。ThreadPoolExecutor中默认的策略就是AbortPolicy，ExecutorService接口的系列ThreadPoolExecutor因为都没有显示的设置拒绝策略，所以默认的都是这个。但是请注意，ExecutorService中的线程池实例队列都是无界的，也就是说把内存撑爆了都不会触发拒绝策略。当自己自定义线程池实例时，使用这个策略一定要处理好触发策略时抛的异常，因为他会打断当前的执行流程。</p>
+</li>
+<li><p>DiscardPolicy丢弃策略：ThreadPoolExecutor.DiscardPolicy：丢弃任务，但是不抛出异常。如果线程队列已满，则后续提交的任务都会被丢弃，且是静默丢弃。</p>
+<p>使用此策略，可能会使我们无法发现系统的异常状态。建议是一些无关紧要的业务采用此策略。例如，本人的博客网站统计阅读量就是采用的这种拒绝策略。</p>
+<p>功能：直接静悄悄的丢弃这个任务，不触发任何动作。<br>使用场景：如果你提交的任务无关紧要，你就可以使用它 。因为它就是个空实现，会悄无声息的吞噬你的的任务。所以这个策略基本上不用了。</p>
+</li>
+<li><p>DiscardOldestPolicy弃老策略：丢弃队列最前面的任务，然后重新提交被拒绝的任务。<br>此拒绝策略，是一种喜新厌旧的拒绝策略。是否要采用此种拒绝策略，还得根据实际业务是否允许丢弃老任务来认真衡量。</p>
+<p>功能：如果线程池未关闭，就弹出队列头部的元素，然后尝试执行<br>使用场景：这个策略还是会丢弃任务，丢弃时也是毫无声息，但是特点是丢弃的是老的未执行的任务，而且是待执行优先级较高的任务。基于这个特性，想到的场景就是，发布消息和修改消息，当消息发布出去后，还未执行，此时更新的消息又来了，这个时候未执行的消息的版本比现在提交的消息版本要低就可以被丢弃了。因为队列中还有可能存在消息版本更低的消息会排队执行，所以在真正处理消息的时候一定要做好消息的版本比较。</p>
+</li>
+<li><p>CallerRunsPolicy调用者运行策略：由调用线程处理该任务。<br>功能：当触发拒绝策略时，只要线程池没有关闭，就由提交任务的当前线程处理。<br>使用场景：一般在不允许失败的、对性能要求不高、并发量较小的场景下使用，因为线程池一般情况下不会关闭，也就是提交的任务一定会被运行，但是由于是调用者线程自己执行的，当多次提交任务时，就会阻塞后续任务执行，性能和效率自然就慢了。</p>
+</li>
+</ol>
+<h3 id="ThreadLocal"><a href="#ThreadLocal" class="headerlink" title="ThreadLocal"></a>ThreadLocal</h3><p><a href="https://cdn.jsdelivr.net/gh/raptor1998/imghouse/byte/202208231618824.png" data-fancybox="group" data-caption="" class="fancybox"><img alt="" title="" data-src="https://cdn.jsdelivr.net/gh/raptor1998/imghouse/byte/202208231618824.png" src="https://cdn.jsdelivr.net/gh/raptor1998/imghouse/raptor1998_img/loading.gif" class="lazyload"></a></p>
+<h5 id="线程封闭"><a href="#线程封闭" class="headerlink" title="线程封闭"></a>线程封闭</h5><p>在了解ThreadLocal之前，我们先了解下什么是线程封闭。</p>
+<p>对象封闭在一个线程里，即便这个对象不是线程安全的，也不会出现并发安全问题。</p>
+<p>例如 栈封闭：就是用栈（stack）来保证线程安全。</p>
+<p>public void testThread() {<br>    StringBuilder s = new StringBuilder();<br>    s.append(“Hello”);<br>}<br>StringBuilder是线程不安全的，但是它只是个局部变量，局部存储在虚拟机栈，虚拟机栈是线程隔离的，所以不会有线程安全问题。</p>
+<p>ThreadLocal线程封闭：简单易用。</p>
+<p>使用ThreadLocal来实现线程封闭，线程封闭的指导思想是封闭，而不是共享。所以说ThreadLocal是用来解决变量共享的并发安全问题，多少有些不精确。</p>
+<h5 id="ThreadLocal-是什么"><a href="#ThreadLocal-是什么" class="headerlink" title="ThreadLocal 是什么"></a>ThreadLocal 是什么</h5><p>从名字我们就可以看到ThreadLocal叫做线程变量，意思是ThreadLocal中填充的变量属于当前线程，该变量对其他线程而言是隔离的。ThreadLocal为变量在每个线程中都创建了一个副本，那么每个线程可以访问自己内部的副本变量。</p>
+<h5 id="总结："><a href="#总结：" class="headerlink" title="总结："></a>总结：</h5><p> 为每个线程复制一份变量副本。</p>
+<p> 底层使用的一个ThreadLocalMap对象存储（键值对存储）。</p>
+<p> 使用ThreadLocal会存在内存泄漏问题。</p>
+<p> 使用ThreadLocal对象作为键存储，是弱引用的，可以被回收掉，键为null，但是value值是强引用，不能被回收。</p>
+<p> 建议：在使用完后，主动调用remove()，删除</p>
+<p><a href="https://img-blog.csdnimg.cn/bb620a99391944a1a1ece4fcfad7c433.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80NTg2Njg0OQ==,size_16,color_FFFFFF,t_70" data-fancybox="group" data-caption="请添加图片描述" class="fancybox"><img alt="请添加图片描述" title="请添加图片描述" data-src="https://img-blog.csdnimg.cn/bb620a99391944a1a1ece4fcfad7c433.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80NTg2Njg0OQ==,size_16,color_FFFFFF,t_70" src="https://cdn.jsdelivr.net/gh/raptor1998/imghouse/raptor1998_img/loading.gif" class="lazyload"></a></p>
+<h5 id="内存泄漏问题"><a href="#内存泄漏问题" class="headerlink" title="内存泄漏问题"></a>内存泄漏问题</h5><p>ThreadLocalMap使用ThreadLocal的弱引用作为key，如果一个ThreadLocal不存在外部强引用时，Key(ThreadLocal)势必会被GC回收，这样就会导致ThreadLocalMap中的key为null，而value还存在着强引用，只有thread线程退出以后，value的强引用链条才会断掉。</p>
+<p>但如果当前线程再迟迟不结束的话，这些key为null的Entry 的value 就会一直存在一条强引用链：</p>
+<p>Thread Ref -&gt; Thread -&gt;ThreadLocalMap -&gt; Entry -&gt; value</p>
+<p>永远无法回收，造成内存泄漏。</p>
+<h5 id="key-使用强引用"><a href="#key-使用强引用" class="headerlink" title="key 使用强引用"></a>key 使用强引用</h5><p>当ThreadLocalMap的key为强引用回收ThreadLocal时，因为ThreadLocalMap还持有ThreadLocal的强引用，如果没有手动删除，ThreadLocal不会被回收，导致Entry内存泄漏。</p>
+<h5 id="key使用弱引用"><a href="#key使用弱引用" class="headerlink" title="key使用弱引用"></a>key使用弱引用</h5><p>当ThreadLocalMap的key为弱引用回收ThreadLocal时，由于ThreadLocalMap持有ThreadLocal的软引用，即使没有手动删除，ThreadLocal也会被回收。当key为null，在下一次ThreadLocalMap调用set()，get()，remove()方法的时候会被清除 value值。</p>
+<h5 id="ThreadLocal正确的使用方法"><a href="#ThreadLocal正确的使用方法" class="headerlink" title="ThreadLocal正确的使用方法"></a>ThreadLocal正确的使用方法</h5><p>每次使用完ThreadLocal都调用它的remove()方法清除数据。</p>
+<h3 id="排序"><a href="#排序" class="headerlink" title="排序"></a>排序</h3><p><a href="https://cdn.jsdelivr.net/gh/raptor1998/imghouse/byte/202208231618806.png" data-fancybox="group" data-caption="" class="fancybox"><img alt="" title="" data-src="https://cdn.jsdelivr.net/gh/raptor1998/imghouse/byte/202208231618806.png" src="https://cdn.jsdelivr.net/gh/raptor1998/imghouse/raptor1998_img/loading.gif" class="lazyload"></a></p>
+</body></html>]]></content>
+      <categories>
+        <category>面试总结</category>
+      </categories>
+      <tags>
+        <tag>Java</tag>
+        <tag>面试总结</tag>
+      </tags>
+  </entry>
 </search>
