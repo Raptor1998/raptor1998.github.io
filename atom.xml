@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://raptor1998.top/"/>
-  <updated>2022-08-23T12:38:23.664Z</updated>
+  <updated>2022-09-25T03:26:48.810Z</updated>
   <id>http://raptor1998.top/</id>
   
   <author>
@@ -15,6 +15,32 @@
   </author>
   
   <generator uri="https://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>ByteDance Month 3</title>
+    <link href="http://raptor1998.top/2022/09/16/ByteDance7/"/>
+    <id>http://raptor1998.top/2022/09/16/ByteDance7/</id>
+    <published>2022-09-15T16:00:00.000Z</published>
+    <updated>2022-09-25T03:26:48.810Z</updated>
+    
+    <content type="html"><![CDATA[<html><head><link rel="stylesheet" class="aplayer-secondary-style-marker" href="\assets\css\APlayer.min.css"><script src="\assets\js\APlayer.min.js" class="aplayer-secondary-script-marker"></script><script class="meting-secondary-script-marker" src="\assets\js\Meting.min.js"></script></head><body><h1 id="测开的理解"><a href="#测开的理解" class="headerlink" title="测开的理解"></a>测开的理解</h1><p>针对于被问的最多的就是，为什么选择做测开，实习的时候确实没想过，一心奔着字节就来了，其他厂的开发offer没去</p><p>首先根据自身实习经历，感觉测开更像是一个贯穿项目始终的督促和保障人员，首先从项目立项开始，和PM和RD review需求文档，继而开始测试用例，查漏补缺，然后在开发的过程中不断的发现风险点，及时暴露出来，最终提测之后开始着手测试工作，包括功能、自动化、性能、兼容等等，最终项目上线小流量观测，感觉测开的角色贯穿整个过程中，而不是之前理解的单纯等研发写完了，测测功能，然后撒手；测开的日常也有一些开发符合业务测试工具的工作，包括环境治理等</p><p>在和百度的三面老哥沟通的时候，问测开的发展前景，得到的答复是发展到工具产品化，从团队影响到公司，再到全行业，这时候要做的就多了，产品、运营等等，前景听起来还是可以的</p><h1 id="字节氛围"><a href="#字节氛围" class="headerlink" title="字节氛围"></a>字节氛围</h1><p>对于我当前所在的组，其实氛围是很好的，和大家相处的都很融洽，每个人都很耐心的解答问题，平时生活中的话题也能聊的上来，所以我还是很喜欢这个氛围的</p><h1 id="润了"><a href="#润了" class="headerlink" title="润了"></a>润了</h1><p>八月中旬，根据上一个实习一年的实习生沟通过后，得知没有hc，又跟ld沟通之后，告知确实没有，随即就开始重新拾起八股，刚好有十天左右的空档，属于是带薪复习了，投了一波测开，没想到反馈率出奇的高，出了快手简历挂，其余四家全约面了</p><ul><li><p>开水团</p><p>感谢收留，流程飞速，直接给了意向，算是稳定了一下军心</p><p>一面大多是基础八股文，没什么阻塞点；二面省去了自我介绍，让我打开美团app，退出到登录界面，分别从前后端角度去出技术方案；然后再从测试角度执行测试计划；手撕  力扣  1539  必须logn</p></li><li><p>小米一面挂</p><p>没有八股，面试官首先介绍了下手机的测试流程和他们负责的通信模块，我一个字没听懂，然后就成闲聊了，确实不懂手机测试，象征性的聊了半小时  然后G</p></li><li><p>360未知</p><p>也是一些基础问题，但是感觉对我没啥取代，简单问了几个，然后没答上来，手撕一道快排，草草结束</p></li><li><p>百度</p><p>一面纯基础，基础到怀疑自己听错了，基本数据类型，mysql增删改查语句，手撕1 ~ n 中，1出现的次数，linux和安卓的知识没答出来</p><p>二面老哥非常实在，说不问花里胡哨的，没有意义，基础的会能干活就行，手撕一道大数的加减乘除（没出）；问了linux下一个类似表格的文件，取出第二列用什么命令，可以，由不会，然后让我java实现，我说了一下思路，又没写了。。。最后还让手撕一个翻转单词，说了下思路，说也不用写了</p><p>三面问的就是比较大的方向问题了，比如字节的自动化测试框架怎么实现，哪些功能，调试等，然后就是一些项目介绍，本科的经历等等</p></li></ul><p>难定，至此，八月底投的测开全约了，but，投的研发岗基本没消息，只能继续等了，押宝华子</p><div id="dplayer0" class="dplayer hexo-tag-dplayer-mark" style="margin-bottom: 20px;"></div><script>(function(){var player = new DPlayer({"container":document.getElementById("dplayer0"),"autoplay":true,"hotkey":true,"preload":"metadata","video":{"url":"https://cdn.jsdelivr.net/gh/Raptor1998/imghouse/untidy/20220920153959.mp4"}});window.dplayers||(window.dplayers=[]);window.dplayers.push(player);})()</script> </body></html>]]></content>
+    
+    <summary type="html">
+    
+      
+      
+        &lt;html&gt;&lt;head&gt;&lt;link rel=&quot;stylesheet&quot; class=&quot;aplayer-secondary-style-marker&quot; href=&quot;\assets\css\APlayer.min.css&quot;&gt;&lt;script src=&quot;\assets\js\APlayer
+      
+    
+    </summary>
+    
+    
+      <category term="随笔" scheme="http://raptor1998.top/categories/%E9%9A%8F%E7%AC%94/"/>
+    
+    
+      <category term="随笔" scheme="http://raptor1998.top/tags/%E9%9A%8F%E7%AC%94/"/>
+    
+  </entry>
   
   <entry>
     <title>mysql日志</title>
@@ -462,29 +488,6 @@
     
     
       <category term="随笔" scheme="http://raptor1998.top/tags/%E9%9A%8F%E7%AC%94/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>ByteStudy 消息队列</title>
-    <link href="http://raptor1998.top/2022/06/10/ByteStudy%E6%B6%88%E6%81%AF%E9%98%9F%E5%88%97/"/>
-    <id>http://raptor1998.top/2022/06/10/ByteStudy%E6%B6%88%E6%81%AF%E9%98%9F%E5%88%97/</id>
-    <published>2022-06-09T16:00:00.000Z</published>
-    <updated>2022-08-15T12:21:42.276Z</updated>
-    
-    <content type="html"><![CDATA[<html><head><link rel="stylesheet" class="aplayer-secondary-style-marker" href="/assets/css/APlayer.min.css"><script src="/assets/js/APlayer.min.js" class="aplayer-secondary-script-marker"></script><script class="meting-secondary-script-marker" src="/assets/js/Meting.min.js"></script></head><body><h1 id="为什么使用"><a href="#为什么使用" class="headerlink" title="为什么使用"></a>为什么使用</h1><p>解耦：通过Pub/Sub发布订阅消息这么一个模型，上游关注通知，而不关注校友处理。<br>缓冲：应对突发流量，假设一个每秒处理2k请求的服务，突然涌入很多流量，为防止为打宕机，可以使用mq，服务每秒从mq拉取2K个请求，保证不超过每秒能处理的最大请求数量即可，保证服务不会挂掉。高峰可能会堆积消息，短暂的积压是可以接受的，高峰过后每秒50个请求，但是服务依然以每秒2K的速度消费<br>广播：一条消息，可以被多个下游分别处理<br>持久化：消息可以被回溯</p><h1 id="Kafka"><a href="#Kafka" class="headerlink" title="Kafka"></a>Kafka</h1><h1 id="消息队列常见的一些问题处理思路"><a href="#消息队列常见的一些问题处理思路" class="headerlink" title="消息队列常见的一些问题处理思路"></a>消息队列常见的一些问题处理思路</h1><h2 id="队列的高可用"><a href="#队列的高可用" class="headerlink" title="队列的高可用"></a>队列的高可用</h2><p>rabbitmq的普通集群模式下，元数据存放在一个实例上，如果连接了其他实例，name那个实例会从queue所在的实例来取数据过来。这会导致消费者每次要么随机连接一个实例，或者固定那个queeu所在的实例消费，前者有数据拉取的开销，后者单实例瓶颈。</p><p>镜像集群：</p><p>在镜像集群下，创建的queue和元数据都存在于多个实例上，就是说每个mq的节点都有这个queue的完整镜像，每次些消息到queue时，会自动同步到多实例上<br>好处在于，任何一个机器宕机，其他节点都还有queue的完整数据<br>坏事处在于，性能开销大，消息同步到所有机器上，导致网络带宽压力和消耗都很大；没有拓展性可言，如果某个queue的负载很重，增加机器，新增的机器也是包含全部的数据，没办法线性拓展queue</p><h2 id="消息幂等性问题"><a href="#消息幂等性问题" class="headerlink" title="消息幂等性问题"></a>消息幂等性问题</h2><p>其实还是得结合实际业务场景来看，比如：<br>数据落库，可以先根据主键查一下，存在走update<br>写redis，天然幂等<br>或者生产者发送消息时，每条数据都加一个全局唯一id，消费的时候去redis查一下，之前是否消费过<br>或者基于数据库的唯一约束</p><h2 id="可靠性传输问题"><a href="#可靠性传输问题" class="headerlink" title="可靠性传输问题"></a>可靠性传输问题</h2><h2 id="顺序性问题"><a href="#顺序性问题" class="headerlink" title="顺序性问题"></a>顺序性问题</h2><p>rabbitmq的错乱场景，一个queue，多个consumer消费；一个queue，一个consumer，但是消费者多线程消费</p><ol><li>拆分queue，每个queue对应一个consumer，生产者发送的时候根据关键值哈希等操作，投放到同一个queue</li><li>一个queue对应一个consumer，consumer内部做内存队列做排队，然后分发给底层的worker处理<br>消费者获取消息后，不直接去消费消息，而是将消息根据关键值哈希放入内存队列，消费者线程去内存队列消费信息</li></ol><h2 id="堆积问题"><a href="#堆积问题" class="headerlink" title="堆积问题"></a>堆积问题</h2><p>一个简单的思路</p><p>先修复consumer的问题，确保其恢复消费速度，然后停掉现有的consumer<br>新建topic，partition是原来的十倍，临时建立好原来十倍的queue数量<br>写一个临时分发数据的consumer服务，去消费积压的数据，消费之后不做任何处理，直接轮询写入临时建立的queue中<br>接着征用十倍的机器来部署consumer，每一批consumer消费一个临时queue数据。这种做法相当于是将临时queeu资源和consumer资源扩大十倍，以十倍速度来消费数据<br>等加压数据消费完之后，再恢复原来的架构<br>如何设计一个消息队列</p></body></html>]]></content>
-    
-    <summary type="html">
-    
-      我无法忍受沉默，而与你交谈恰是良药。
-    
-    </summary>
-    
-    
-      <category term="实习技术帖" scheme="http://raptor1998.top/categories/%E5%AE%9E%E4%B9%A0%E6%8A%80%E6%9C%AF%E5%B8%96/"/>
-    
-    
-      <category term="实习技术帖" scheme="http://raptor1998.top/tags/%E5%AE%9E%E4%B9%A0%E6%8A%80%E6%9C%AF%E5%B8%96/"/>
     
   </entry>
   
